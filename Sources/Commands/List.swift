@@ -1,8 +1,11 @@
 import ArgumentParser
 import Foundation
+
 import Files
-import Models
 import SwiftyTextTable
+import Rainbow
+
+import Models
 
 struct List: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
@@ -14,7 +17,6 @@ extension List {
         let data = try! file.read()
         let decoder = PropertyListDecoder()
         let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-        //dump(settings)
         let root = settings.Children!.filter { child in
             return child.Children != nil
         }
@@ -30,12 +32,12 @@ extension List {
             .filter {
                 $0.url!.hasPrefix("javascript")
             }
-        let titleCol = TextTableColumn(header: "Title")
-        let urlCol = TextTableColumn(header: "URL")
-        var table = TextTable(columns: [titleCol, urlCol], header: "Your Bookmarklets")
+        let titleCol = TextTableColumn(header: "Title".bold)
+        let urlCol = TextTableColumn(header: "URL".bold)
+        var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
         
         bookmarklets.forEach { bookmarklet in
-            table.addRow(values: [bookmarklet.title!, bookmarklet.url!])
+            table.addRow(values: [bookmarklet.title!, String(bookmarklet.url!).red])
         }
         
         print(table.render())
