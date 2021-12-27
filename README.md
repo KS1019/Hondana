@@ -16,7 +16,7 @@ mkdir .Hondana
 ```
 After that, you first need to move `Bookmarks.plist` from `~/Library/Safari/` to `~/.Hondana/` and then symlink `~/.Hondana/Bookmarks.plist` to `~/Library/Safari/Bookmarks.plist`. This process can be done by
 ```shell
-mv ~/Library/Safari/Bookmarks.plist ~/.Hondana/ && ln -s ~/.Hondana/Bookmarks.plist 
+mv ~/Library/Safari/Bookmarks.plist ~/.Hondana/ && ln -s ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist
 ```
 This oneliner requires Terminal to have full disk access and you can grant the access from Settings. However, it could potentially be a security risk so if you are not sure about what you are trying to do, please refrain from using this tool.
 

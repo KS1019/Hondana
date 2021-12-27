@@ -22,7 +22,9 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Files",
+                "Models",
             ]),
+        .target(name: "Models"),
         .testTarget(
             name: "HondanaTests",
             dependencies: ["Commands"]),
