@@ -9,43 +9,40 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let data = try Data(contentsOf: URL(string: Constants.hondanaDirURL + "Bookmarks.plist")!)
+        let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
+        let data = try! file.read()
         let decoder = PropertyListDecoder()
         let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
         //dump(settings)
         let root = settings.Children!.filter { child in
-            return child.Children?.count != nil
+            return child.Children != nil
         }
         
-        root.forEach { child in
-            if let urlString = child.URLString,
-               urlString.hasPrefix("javascript")  {
-                print("Title == \(child.Title!)")
-                print("==============\n\n")
-                print("URLString = \(urlString)")
-                print("\n\n==============")
-            } else {
-                if let grandkids = child.Children {
-                    grandkids.forEach { gk in
-                        
-                        if let s = gk.URLString,
-                           s.hasPrefix("javascript") {
-                            print("Grand Kids")
-                            print("Title == \(gk.URIDictionary!.title)")
-                            print("==============\n\n")
-                            print("URLString = \(s)")
-                            print("\n\n==============")
-                        }
-                    }
-                }
+        let bookmarklets = root
+            .compactMap { child in
+                child.Children
             }
+            .flatMap { $0 }
+            .map {
+                (title: $0.URIDictionary?.title, url: $0.URLString)
+            }
+            .filter {
+                $0.url!.hasPrefix("javascript")
+            }
+        
+        print("=========== bookmarklets ===========\n")
+        bookmarklets.forEach { bookmarklet in
+            print(bookmarklet.title!)
+            print(bookmarklet.url!)
+            print("")
         }
+        print("\n=========== bookmarklets ===========")
     }
 }
 
 extension List {
     enum Constants {
-        static let commandName = ""
+        static let commandName = "list"
         static let abstract = ""
         static let discussion = ""
         static let version = ""
