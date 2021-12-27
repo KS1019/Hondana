@@ -2,6 +2,7 @@ import ArgumentParser
 import Foundation
 import Files
 import Models
+import SwiftyTextTable
 
 struct List: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
@@ -24,19 +25,20 @@ extension List {
             }
             .flatMap { $0 }
             .map {
-                (title: $0.URIDictionary?.title, url: $0.URLString)
+                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(100))
             }
             .filter {
                 $0.url!.hasPrefix("javascript")
             }
+        let titleCol = TextTableColumn(header: "Title")
+        let urlCol = TextTableColumn(header: "URL")
+        var table = TextTable(columns: [titleCol, urlCol], header: "Your Bookmarklets")
         
-        print("=========== bookmarklets ===========\n")
         bookmarklets.forEach { bookmarklet in
-            print(bookmarklet.title!)
-            print(bookmarklet.url!)
-            print("")
+            table.addRow(values: [bookmarklet.title!, bookmarklet.url!])
         }
-        print("\n=========== bookmarklets ===========")
+        
+        print(table.render())
     }
 }
 
