@@ -4,6 +4,7 @@ import Files
 import Foundation
 
 import Models
+import Extensions
 
 struct Sync: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
@@ -31,7 +32,7 @@ extension Sync {
             let jsFiles = folder.files.filter { $0.extension == "js" }
             return jsFiles
                 .map {
-                    (uuid: $0.name.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try! $0.readAsString(encodedAs: .utf8))
+                    (uuid: $0.name.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try! $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
                 }
         case .plist:
             let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
@@ -47,11 +48,11 @@ extension Sync {
                     child.Children
                 }
                 .flatMap { $0 }
-                .map {
-                    (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: String($0.URLString!.prefix(100)))
-                }
                 .filter {
-                    $0.url.hasPrefix("javascript")
+                    $0.URLString!.hasPrefix("javascript")
+                }
+                .map {
+                    (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
                 }
             
             return bookmarklets

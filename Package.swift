@@ -27,6 +27,7 @@ let package = Package(
                 "Models",
                 "Rainbow",
                 "SwiftyTextTable",
+                "Extensions",
             ]),
         .target(name: "Models"),
         .target(name: "Extensions"),
