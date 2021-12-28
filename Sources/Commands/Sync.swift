@@ -32,7 +32,7 @@ extension Sync {
             let jsFiles = folder.files.filter { $0.extension == "js" }
             return jsFiles
                 .map {
-                    (uuid: $0.name.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try! $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
+                    (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try! $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
                 }
         case .plist:
             let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
@@ -62,15 +62,23 @@ extension Sync {
     private func write(bookmarklets: [(uuid: String, title: String, url: String)], to: SyncOrigin) {
         switch to {
         case .hondanaDir:
+            // FIXME: This will fail when Bookmarklets/ does not exist
+            // Bookmarklets/ are assumed to be accessible
             let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
             
+            // FIXME: This can be super slow as the number of bookmarklets grows
             bookmarklets
-                .forEach {
-                    if folder.containsFile(named: "\($0.uuid)+\($0.title).js") {
-                        let file = try! folder.file(named: "\($0.uuid)+\($0.title).js")
-                        try! file.write($0.url, encoding: .utf8)
+                .forEach { bookmarklet in
+                    if folder.files.count() > 0 {
+                        folder.files.forEach { file in
+                            if file.nameExcludingExtension.contains(bookmarklet.uuid) {
+                                try! file.write(bookmarklet.url, encoding: .utf8)
+                            } else {
+                                try! folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
+                            }
+                        }
                     } else {
-                        try! folder.createFile(at: Constants.hondanaDirURL + Constants.bookmarkletsURL + "\($0.uuid)+\($0.title).js", contents: $0.url.data(using: .utf8))
+                        try! folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
                     }
                 }
         case .plist:
@@ -81,7 +89,11 @@ extension Sync {
             
             bookmarklets.forEach {
                 let newBookmarklet = Bookmark(WebBookmarkUUID: $0.uuid, WebBookmarkType: "WebBookmarkTypeLeaf", URLString: $0.url, URIDictionary: URIDictionary(title: $0.title))
-                settings.Children![1].Children!.insert(newBookmarklet, at: 0)
+                if let index = settings.Children![1].Children!.firstIndex(where: { bookmarklet in newBookmarklet.WebBookmarkUUID == bookmarklet.WebBookmarkUUID }) {
+                    settings.Children![1].Children![index] = newBookmarklet
+                } else {
+                    settings.Children![1].Children!.insert(newBookmarklet, at: 0)
+                }
             }
             let encoder = PropertyListEncoder()
             if let encoded = try? encoder.encode(settings) {
