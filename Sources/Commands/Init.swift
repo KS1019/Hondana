@@ -4,6 +4,7 @@ import Files
 import Foundation
 
 import Models
+import Extensions
 
 struct Init: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
@@ -34,11 +35,11 @@ extension Init {
                 child.Children
             }
             .flatMap { $0 }
-            .map {
-                (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!)
-            }
             .filter {
-                $0.url.hasPrefix("javascript")
+                $0.URLString!.hasPrefix("javascript")
+            }
+            .map {
+                (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
             }
         
         return bookmarklets
