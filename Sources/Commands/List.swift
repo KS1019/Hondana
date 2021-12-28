@@ -6,7 +6,7 @@ import Rainbow
 import Models
 
 struct List: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
+    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
 }
 
 extension List {
@@ -45,9 +45,8 @@ extension List {
 extension List {
     enum Constants {
         static let commandName = "list"
-        static let abstract = ""
-        static let discussion = ""
-        static let version = ""
+        static let abstract = "`hondana list` lists every bookmarklet present in `Bookmarks.plist`"
+        static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarks.plist`, reads the plist, and outputs the filtered result in the table."
         
         static let hondanaDirURL = "~/.Hondana/"
     }

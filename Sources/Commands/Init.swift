@@ -5,7 +5,7 @@ import Models
 import Extensions
 
 struct Init: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
+    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
 }
 
 extension Init {
@@ -61,9 +61,8 @@ extension Init {
 extension Init {
     enum Constants {
         static let commandName = "init"
-        static let abstract = ""
-        static let discussion = ""
-        static let version = ""
+        static let abstract = "`hondana init` initilizes `~/.Hondana/Bookmarklets/` directory."
+        static let discussion = "`hondana init` creates `Bookmarklets/` directory if not existed already and copies the bookmarklets from `Bookmarks.plist`"
         
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"

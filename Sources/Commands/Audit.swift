@@ -3,7 +3,7 @@
 import ArgumentParser
 
 struct Audit: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
+    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
 }
 
 extension Audit {
@@ -17,6 +17,5 @@ extension Audit {
         static let commandName = ""
         static let abstract = ""
         static let discussion = ""
-        static let version = ""
     }
 }

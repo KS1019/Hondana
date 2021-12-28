@@ -12,9 +12,9 @@ struct Hondana: ParsableCommand {
 
 extension Hondana {
     enum Constants {
-        static let commandName = ""
-        static let abstract = ""
-        static let discussion = ""
-        static let version = ""
+        static let commandName = "hondana"
+        static let abstract = "`hondana` helps you manage bookmarklets."
+        static let discussion = "`hondana` is the root command to access other subcommands in order to manage your bookmarklets."
+        static let version = "0.0.1"
     }
 }

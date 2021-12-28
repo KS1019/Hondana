@@ -5,9 +5,9 @@ import Models
 import Extensions
 
 struct Sync: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion, version: Constants.version)
+    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
     
-    @Option(name: .shortAndLong, help: "")
+    @Option(name: .shortAndLong, help: "Original source for syncing and overwriting bookmarklets in the other.")
     var from: SyncOrigin = .hondanaDir
 }
 
@@ -111,9 +111,8 @@ extension Sync {
 extension Sync {
     enum Constants {
         static let commandName = "sync"
-        static let abstract = ""
-        static let discussion = ""
-        static let version = ""
+        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in `~/.Hondana/Bookmarks.plist`"
+        static let discussion = "`hondana sync` first reads the `--from` option to decide whether JavaScript files or Bookmarks.plist should be used as origin. After that, it will read the bookmarklets from the orign to overwrite the ones in the other"
         
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"
