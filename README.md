@@ -24,5 +24,30 @@ If you know what you are doing, grant the access and make sure to remove the acc
 
 ## Usage
 
+```shell
+OVERVIEW: `hondana` helps you manage bookmarklets.
+
+`hondana` is the root command to access other subcommands in order to manage
+your bookmarklets.
+
+USAGE: hondana <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  sync                    `hondana sync` syncs the JavaScript files in
+                          `~/.Hondana/Bookmarklets/` with bookmarklets in
+                          `~/.Hondana/Bookmarks.plist`
+  list                    `hondana list` lists every bookmarklet present in
+                          `Bookmarks.plist`
+  init                    `hondana init` initilizes `~/.Hondana/Bookmarklets/`
+                          directory.
+
+  See 'hondana help <subcommand>' for detailed help.
+
+```
+
 ## Contributing
 If you want to report a bug or request a feature, please open an issue. If you want to improve the tool, please submit a Pull Request.
