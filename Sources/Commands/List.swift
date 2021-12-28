@@ -51,6 +51,6 @@ extension List {
         static let discussion = ""
         static let version = ""
         
-        static let hondanaDirURL = "~/.hondana/"
+        static let hondanaDirURL = "~/.Hondana/"
     }
 }
