@@ -29,8 +29,12 @@ let package = Package(
                 "SwiftyTextTable",
             ]),
         .target(name: "Models"),
+        .target(name: "Extensions"),
         .testTarget(
             name: "HondanaTests",
             dependencies: ["Commands"]),
+        .testTarget(
+            name: "ExtensionsTests",
+            dependencies: ["Extensions"]),
     ]
 )
