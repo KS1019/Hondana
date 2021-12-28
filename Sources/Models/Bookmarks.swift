@@ -8,27 +8,44 @@
 import Foundation
 
 struct BookmarksPlist: Codable {
-    let Root: [String: Bookmark]
+    var Root: [String: Bookmark]
 }
 
 public struct Bookmark: Codable {
-    public let WebBookmarkUUID: String
-    public let WebBookmarkFileVersion: Int?
-    public let Children: [Bookmark]?
-    public let Sync: Sync?
-    public let Title: String?
-    public let WebBookmarkType: String
-    public let WebBookmarkIdentifier: String?
-    public let ShouldOmitFromUI: Bool?
-    public let URLString: String?
-    public let URIDictionary: URLDictionary?
+    public init(WebBookmarkUUID: String, WebBookmarkFileVersion: Int? = nil, Children: [Bookmark]? = nil, Sync: Sync? = nil, Title: String? = nil, WebBookmarkType: String, WebBookmarkIdentifier: String? = nil, ShouldOmitFromUI: Bool? = nil, URLString: String? = nil, URIDictionary: URIDictionary? = nil) {
+        self.WebBookmarkUUID = WebBookmarkUUID
+        self.WebBookmarkFileVersion = WebBookmarkFileVersion
+        self.Children = Children
+        self.Sync = Sync
+        self.Title = Title
+        self.WebBookmarkType = WebBookmarkType
+        self.WebBookmarkIdentifier = WebBookmarkIdentifier
+        self.ShouldOmitFromUI = ShouldOmitFromUI
+        self.URLString = URLString
+        self.URIDictionary = URIDictionary
+    }
+    
+    public var WebBookmarkUUID: String
+    public var WebBookmarkFileVersion: Int?
+    public var Children: [Bookmark]?
+    public var Sync: Sync?
+    public var Title: String?
+    public var WebBookmarkType: String
+    public var WebBookmarkIdentifier: String?
+    public var ShouldOmitFromUI: Bool?
+    public var URLString: String?
+    public var URIDictionary: URIDictionary?
 }
 
 public struct Sync: Codable {
-    public let ServerID: String?
-    public let `Data`: Data?
+    public var ServerID: String?
+    public var `Data`: Data?
 }
 
-public struct URLDictionary: Codable {
-    public let title: String
+public struct URIDictionary: Codable {
+    public init(title: String) {
+        self.title = title
+    }
+    
+    public var title: String
 }
