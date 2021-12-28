@@ -6,13 +6,8 @@ struct Hondana: ParsableCommand {
         commandName: Constants.commandName, abstract: Constants.abstract,
         discussion: Constants.discussion, version: Constants.version,
         subcommands: [
-            Sync.self, List.self, Audit.self, Init.self
+            Sync.self, List.self, Init.self
         ])
-}
-
-extension Hondana {
-    func run() throws {
-    }
 }
 
 extension Hondana {

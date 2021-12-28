@@ -1,3 +1,5 @@
+// TODO: This subcommand is currently inaccessible from cli.
+
 import ArgumentParser
 
 struct Audit: ParsableCommand {

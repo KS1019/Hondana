@@ -1,10 +1,8 @@
 import ArgumentParser
 import Foundation
-
 import Files
 import SwiftyTextTable
 import Rainbow
-
 import Models
 
 struct List: ParsableCommand {

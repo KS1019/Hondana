@@ -1,8 +1,6 @@
 import ArgumentParser
 import Files
-
 import Foundation
-
 import Models
 import Extensions
 
@@ -63,7 +61,7 @@ extension Sync {
         switch to {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
-            // Bookmarklets/ are assumed to be accessible
+            // FIXME: Bookmarklets/ are assumed to be accessible. Throw an error if not.
             let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
             
             // FIXME: This can be super slow as the number of bookmarklets grows
