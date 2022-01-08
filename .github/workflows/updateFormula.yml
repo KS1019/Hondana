@@ -1,20 +1,19 @@
-# on:
-#   release:
-#     types:
-#       - released
-
-# name: Update Homebrew Formula
-
-# jobs:
-#   formula:
-#     name: Update Homebrew formula
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Update the Homebrew formula with latest release
-#         uses: NSHipster/update-homebrew-formula-action@main
-#         with:
-#           repository: KS1019/Hondana
-#           tap: KS1019/homebrew-formulae
-#           formula: hondana.rb
-#         env:
-#           GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+  on:
+    release:
+      types:
+        - released
+  
+  name: Update Homebrew Formula
+  
+  jobs:
+    formula:
+      name: Run update action
+      runs-on: ubuntu-latest
+      steps:
+        - uses: mislav/bump-homebrew-formula-action@v1
+          with:
+            formula-name: hondana
+            formula-path: hondana.rb
+            homebrew-tap: KS1019/homebrew-formulae
+          env:
+            COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
