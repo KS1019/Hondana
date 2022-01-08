@@ -1,20 +1,20 @@
-on:
-  release:
-    types:
-      - released
+# on:
+#   release:
+#     types:
+#       - released
 
-name: Update Homebrew Formula
+# name: Update Homebrew Formula
 
-jobs:
-  formula:
-    name: Update Homebrew formula
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update the Homebrew formula with latest release
-        uses: NSHipster/update-homebrew-formula-action@main
-        with:
-          repository: KS1019/Hondana
-          tap: KS1019/homebrew-formulae
-          formula: hondana.rb
-        env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+# jobs:
+#   formula:
+#     name: Update Homebrew formula
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Update the Homebrew formula with latest release
+#         uses: NSHipster/update-homebrew-formula-action@main
+#         with:
+#           repository: KS1019/Hondana
+#           tap: KS1019/homebrew-formulae
+#           formula: hondana.rb
+#         env:
+#           GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
