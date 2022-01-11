@@ -10,10 +10,14 @@
       name: Run update action
       runs-on: ubuntu-latest
       steps:
+        - name: Extract version
+          id: extract-version
+          run: |
+            printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
         - uses: mislav/bump-homebrew-formula-action@v1
           with:
             formula-name: hondana
             formula-path: hondana.rb
             homebrew-tap: KS1019/homebrew-formulae
           env:
-            COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
