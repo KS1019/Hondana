@@ -18,7 +18,7 @@ After that, you first need to move `Bookmarks.plist` from `~/Library/Safari/` to
 ```shell
 mv ~/Library/Safari/Bookmarks.plist ~/.Hondana/Bookmarks.plist && ln -s ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist
 ```
-This oneliner requires Terminal to have full disk access and you can grant the access from Settings. However, it could potentially be a security risk so if you are not sure about what you are trying to do, please refrain from using this tool. In addition, it is recommended to have your `Bookmarks.plist` saved to somewhere eles as a backup.
+This oneliner requires Terminal to have full disk access and you can grant the access from Settings. However, it could potentially be a security risk so if you are not sure about what you are about to do, please refrain from using this tool. In addition, it is recommended to have your `Bookmarks.plist` saved to somewhere eles as a backup.
 
 If you know what you are doing, grant the access and make sure to remove the access after you finished the set up.
 
