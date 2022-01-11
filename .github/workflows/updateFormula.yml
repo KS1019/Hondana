@@ -1,9 +1,9 @@
+  name: Update Homebrew formula
+
   on:
     release:
       types:
         - released
-  
-  name: Update Homebrew Formula
   
   jobs:
     formula:
