@@ -1,0 +1,24 @@
+  name: Update Homebrew formula
+
+  on:
+    workflow_dispatch:
+      inputs:
+        tag-name:
+          description: 'The git tag name to bump the formula to'
+          required: true
+  
+  jobs:
+    formula:
+      name: Run update action
+      runs-on: ubuntu-latest
+      steps:
+        - uses: mislav/bump-homebrew-formula-action@v1
+          with:
+            formula-name: hondana
+            formula-path: hondana.rb
+            homebrew-tap: KS1019/homebrew-formulae
+            tag-name: ${{ github.event.inputs.tag-name }}
+            download-url: https://example.com/foo/${{ github.event.inputs.tag-name }}.tar.gz
+          env:
+            COMMITTER_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
