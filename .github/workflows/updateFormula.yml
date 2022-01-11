@@ -20,4 +20,4 @@
             formula-path: hondana.rb
             homebrew-tap: KS1019/homebrew-formulae
           env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            COMMITTER_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
