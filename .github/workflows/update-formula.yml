@@ -14,7 +14,7 @@
           id: extract-version
           run: |
             printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
-        - uses: mislav/bump-homebrew-formula-action@v1
+        - uses: mislav/bump-homebrew-formula-action@1.16
           with:
             formula-name: hondana
             formula-path: hondana.rb
