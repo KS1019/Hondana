@@ -4,7 +4,7 @@ init:
 
 undo:
 	unlink ~/Library/Safari/Bookmarks.plist
-	mv ~/.Hondana/Bookmarks.plist ~/Library/Safari/
+	mv ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist
 	rm -r ~/.Hondana
 
 link:
