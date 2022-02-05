@@ -18,14 +18,14 @@ extension List {
         let root = settings.Children!.filter { child in
             return child.Children != nil
         }
-        
+        var w = winsize()
         let bookmarklets = root
             .compactMap { child in
                 child.Children
             }
             .flatMap { $0 }
             .map {
-                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(100))
+                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ? Int(w.ws_col) - 30 : 30))
             }
             .filter {
                 $0.url!.hasPrefix("javascript")
@@ -35,7 +35,7 @@ extension List {
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
         
         bookmarklets.forEach { bookmarklet in
-            table.addRow(values: [bookmarklet.title!, String(bookmarklet.url!).red])
+            table.addRow(values: [bookmarklet.title!, String(bookmarklet.url! + "...").red])
         }
         
         print(table.render())
