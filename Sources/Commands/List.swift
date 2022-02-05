@@ -25,7 +25,7 @@ extension List {
             }
             .flatMap { $0 }
             .map {
-                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 ? Int(w.ws_col) - 30 : 30))
+                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ? Int(w.ws_col) - 30 : 30))
             }
             .filter {
                 $0.url!.hasPrefix("javascript")
