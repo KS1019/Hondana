@@ -1,11 +1,17 @@
 init:
 	cd ~ && mkdir .Hondana
-	mv ~/Library/Safari/Bookmarks.plist ~/.Hondana/Bookmarks.plist && ln -s ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist  
+	mv ~/Library/Safari/Bookmarks.plist ~/.Hondana/Bookmarks.plist && ln -s ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist
 
 undo:
 	unlink ~/Library/Safari/Bookmarks.plist
 	mv ~/.Hondana/Bookmarks.plist ~/Library/Safari/
 	rm -r ~/.Hondana
+
+link:
+	ln -s ~/.Hondana/Bookmarks.plist ~/Library/Safari/Bookmarks.plist
+
+unlink:
+	unlink ~/Library/Safari/Bookmarks.plist
 
 prefix ?= /usr/local
 bindir = $(prefix)/bin
@@ -24,4 +30,4 @@ uninstall:
 clean:
 	rm -rf .build
 
-.PHONY: init undo build install uninstall clean
+.PHONY: init undo build install uninstall clean link unlink
