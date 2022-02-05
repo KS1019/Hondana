@@ -70,6 +70,7 @@ extension Sync {
                     if folder.files.count() > 0 {
                         folder.files.forEach { file in
                             if file.nameExcludingExtension.contains(bookmarklet.uuid) {
+                                try! file.rename(to: "\(bookmarklet.uuid)+\(bookmarklet.title)")
                                 try! file.write(bookmarklet.url, encoding: .utf8)
                             } else {
                                 try! folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
