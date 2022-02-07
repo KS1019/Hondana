@@ -15,6 +15,7 @@ let package = Package(
         .package(url: "https://github.com/JohnSundell/Files", from: "4.0.0"),
         .package(url: "https://github.com/onevcat/Rainbow", .upToNextMajor(from: "4.0.0")),
         .package(url: "https://github.com/scottrhoyt/SwiftyTextTable", .upToNextMajor(from: "0.9.0")),
+        .package(url: "https://github.com/KS1019/AssertSwiftCLI", .upToNextMinor(from: "0.0.1"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -33,7 +34,7 @@ let package = Package(
         .target(name: "Extensions"),
         .testTarget(
             name: "HondanaTests",
-            dependencies: ["Commands"]),
+            dependencies: ["Commands", "AssertSwiftCLI"]),
         .testTarget(
             name: "ExtensionsTests",
             dependencies: ["Extensions"]),
