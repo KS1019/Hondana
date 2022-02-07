@@ -16,3 +16,5 @@ jobs:
         uses: docker://ghcr.io/danger/danger-swift-with-swiftlint:3.12.3
         with:
             args: --failOnErrors --no-publish-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
