@@ -95,8 +95,9 @@ extension Sync {
                 }
             }
             let encoder = PropertyListEncoder()
-            let encoded = try! encoder.encode(settings)
-            try! file.write(encoded)
+            if let encoded = try? encoder.encode(settings) {
+                try! file.write(encoded)
+            }
         }
     }
 }
