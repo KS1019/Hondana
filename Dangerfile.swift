@@ -8,6 +8,4 @@ if allSourceFiles.first(where: { $0.fileType == .swift }) != nil {
     if violation.isEmpty {
         message("No violation found!!!")
     }
-} else {
-    message("No .swift file was added")
 }
