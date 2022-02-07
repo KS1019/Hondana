@@ -7,6 +7,15 @@ on:
     paths:
       - '**.swift'
 
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  # deployments: read
+  issues: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
