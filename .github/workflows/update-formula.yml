@@ -19,6 +19,5 @@
             formula-name: hondana
             formula-path: hondana.rb
             homebrew-tap: KS1019/homebrew-formulae
-            download-url: https://github.com/KS1019/Hondana.git
           env:
             COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
