@@ -13,7 +13,9 @@ extension Hondana {
     enum Constants {
         static let commandName = "hondana"
         static let abstract = "`hondana` helps you manage bookmarklets."
-        static let discussion = "`hondana` is the root command to access other subcommands in order to manage your bookmarklets."
+        static let discussion = """
+        `hondana` is the root command to access other subcommands in order to manage your bookmarklets.
+        """
     }
 }
 
