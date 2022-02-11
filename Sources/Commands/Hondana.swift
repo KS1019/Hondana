@@ -1,5 +1,6 @@
 import ArgumentParser
 
+@main
 struct Hondana: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: Constants.commandName, abstract: Constants.abstract,
@@ -18,5 +19,3 @@ extension Hondana {
         """
     }
 }
-
-Hondana.main()
