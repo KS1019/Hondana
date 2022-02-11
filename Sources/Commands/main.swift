@@ -1,6 +1,5 @@
 import ArgumentParser
 
-@main
 struct Hondana: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: Constants.commandName, abstract: Constants.abstract,
@@ -17,3 +16,5 @@ extension Hondana {
         static let discussion = "`hondana` is the root command to access other subcommands in order to manage your bookmarklets."
     }
 }
+
+Hondana.main()
