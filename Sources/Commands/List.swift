@@ -12,9 +12,17 @@ struct List: ParsableCommand {
 extension List {
     func run() throws {
         var w = winsize()
-        let bookmarklets: [(uuid: String, title: String, url: String)] = (try! Folder(path: Constants.hondanaDirURL + "Bookmarklets/").files.filter { $0.extension == "js" }).map {
-            (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: String(try! $0.readAsString(encodedAs: .utf8).withoutJSPrefix.minified.prefix(ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ? Int(w.ws_col) - 30 : 30)))
-        }
+        let bookmarklets: [(uuid: String, title: String, url: String)] =
+        try Folder(path: Constants.hondanaDirURL).createSubfolderIfNeeded(at: "Bookmarklets/")
+            .files
+            .filter { $0.extension == "js" }
+            .map { (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                    title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                    url: String(try $0.readAsString(encodedAs: .utf8)
+                        .withoutJSPrefix.minified.prefix(
+                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ?
+                                                         Int(w.ws_col) - 30 : 30)))
+            }
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
