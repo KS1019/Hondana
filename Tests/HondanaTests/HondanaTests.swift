@@ -26,6 +26,7 @@ final class HondanaTests: XCTestCase {
             """)
     }
 
+    // swiftlint:disable line_length
     func testListWithJSFiles() throws {
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
         try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))

@@ -1,6 +1,7 @@
 import XCTest
 import Extensions
 
+// swiftlint:disable line_length
 final class StringExtensionsTests: XCTestCase {
     let bookmarklet1 = "javascript:(function()%7B%20var%20t%20=%20document.createElement('textarea');%20var%20s%20=%20document.getSelection();%20t.textContent%20=%20%60%5B$%7B%20s.isCollapsed%20?%20document.title%20:%20s.toString()%20%7D%5D($%7B%20document.URL%20%7D)%60;%20var%20b%20=%20document.getElementsByTagName('body')%5B0%5D;%20b.appendChild(t);%20t.select();document.execCommand('copy');%20b.removeChild(t);%20%7D)();"
 
