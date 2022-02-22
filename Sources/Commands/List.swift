@@ -23,6 +23,10 @@ extension List {
                             ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ?
                                                          Int(w.ws_col) - 30 : 30)))
             }
+        guard !bookmarklets.isEmpty else {
+            print("No bookmarklet exist")
+            return
+        }
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)

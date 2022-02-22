@@ -11,13 +11,7 @@ final class HondanaTests: XCTestCase {
     
     func testListWithoutJSFiles() throws {
         try AssertExecuteCommand(command: "hondana list", expected: """
-            +-------------+
-            | Bookmarklets |
-            +-------------+
-            | Title | URL |
-            +-------+-----+
-            
-            +-------+-----+
+            No bookmarklet exist
             """)
     }
     
