@@ -24,7 +24,7 @@ public struct Bookmark: Codable {
         self.URLString = URLString
         self.URIDictionary = URIDictionary
     }
-    
+
     public var WebBookmarkUUID: String
     public var WebBookmarkFileVersion: Int?
     public var Children: [Bookmark]?
@@ -46,6 +46,6 @@ public struct URIDictionary: Codable {
     public init(title: String) {
         self.title = title
     }
-    
+
     public var title: String
 }

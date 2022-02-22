@@ -30,11 +30,11 @@ extension List {
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
-        
+
         bookmarklets.forEach { bookmarklet in
             table.addRow(values: [bookmarklet.title, String(bookmarklet.url + "...").red])
         }
-        
+
         print(table.render())
     }
 }
@@ -44,7 +44,7 @@ extension List {
         static let commandName = "list"
         static let abstract = "`hondana list` lists every bookmarklet present in `~/.Hondana/Bookmarklets/`"
         static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."
-        
+
         static let hondanaDirURL = "~/.Hondana/"
     }
 }

@@ -10,22 +10,23 @@ final class HondanaTests: XCTestCase {
         hondaDirExistsPrev = try Folder(path: "~/").containsSubfolder(named: ".Hondana")
         try Folder(path: "~").createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
     }
-    
+
     override func tearDownWithError() throws {
         guard !hondaDirExistsPrev else { return }
         try Folder(path: "~/.Hondana").delete()
     }
-    
+
     func testVersionFlag() throws {
         try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6-d")
     }
-    
+
     func testListWithoutJSFiles() throws {
         try AssertExecuteCommand(command: "hondana list", expected: """
             No bookmarklet exist
             """)
     }
-    
+
+    // swiftlint:disable line_length
     func testListWithJSFiles() throws {
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
         try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
@@ -38,7 +39,7 @@ final class HondanaTests: XCTestCase {
             | test  | (alert(%22testing%22))()%3B%0A... |
             +-------+-----------------------------------+
             """)
-        
+
         try File(path: "~/.Hondana/Bookmarklets/+test.js").delete()
     }
 
