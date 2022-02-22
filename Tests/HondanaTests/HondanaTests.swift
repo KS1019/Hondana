@@ -1,4 +1,5 @@
 import XCTest
+import Files
 import class Foundation.Bundle
 
 import AssertSwiftCLI
@@ -6,6 +7,34 @@ import AssertSwiftCLI
 final class HondanaTests: XCTestCase {
     func testVersionFlag() throws {
         try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6-d")
+    }
+    
+    func testListWithoutJSFiles() throws {
+        try AssertExecuteCommand(command: "hondana list", expected: """
+            +-------------+
+            | Bookmarklets |
+            +-------------+
+            | Title | URL |
+            +-------+-----+
+            
+            +-------+-----+
+            """)
+    }
+    
+    func testListWithJSFiles() throws {
+        let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
+        try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
+        try AssertExecuteCommand(command: "hondana list", expected: """
+            +-------------------------------------------+
+            | Bookmarklets                              |
+            +-------------------------------------------+
+            | Title | URL                               |
+            +-------+-----------------------------------+
+            | test  | (alert(%22testing%22))()%3B%0A... |
+            +-------+-----------------------------------+
+            """)
+        
+        try File(path: "~/.Hondana/Bookmarklets/+test.js").delete()
     }
 
     /// Returns path to the built products directory.
