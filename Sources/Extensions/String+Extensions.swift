@@ -8,7 +8,7 @@ extension String {
             return addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
         }
     }
-    
+
     public var unminified: String {
         if hasPrefix("javascript:") {
             return "javascript:" + withoutJSPrefix.removingPercentEncoding!
@@ -16,7 +16,7 @@ extension String {
             return removingPercentEncoding!
         }
     }
-    
+
     public var withoutJSPrefix: String {
         if hasPrefix("javascript:") {
             return String(dropFirst("javascript:".count))
@@ -24,7 +24,7 @@ extension String {
             return self
         }
     }
-    
+
     public var withJSPrefix: String {
         if !hasPrefix("javascript:") {
             return "javascript:" + self

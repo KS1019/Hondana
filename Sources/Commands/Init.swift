@@ -18,7 +18,7 @@ extension Init {
             print("hondana already run. Aborting Init.")
         }
     }
-    
+
     private func readJSContents() -> [(uuid: String, title: String, url: String)] {
         let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
         let data = try! file.read()
@@ -27,7 +27,7 @@ extension Init {
         let root = settings.Children!.filter { child in
             return child.Children != nil
         }
-        
+
         let bookmarklets = root
             .compactMap { child in
                 child.Children
@@ -39,13 +39,13 @@ extension Init {
             .map {
                 (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
             }
-        
+
         return bookmarklets
     }
-    
+
     private func write(bookmarklets: [(uuid: String, title: String, url: String)]) {
         let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
-        
+
         bookmarklets
             .forEach {
                 if folder.containsFile(named: "\($0.uuid)+\($0.title).js") {
@@ -63,7 +63,7 @@ extension Init {
         static let commandName = "init"
         static let abstract = "`hondana init` initilizes `~/.Hondana/Bookmarklets/` directory."
         static let discussion = "`hondana init` creates `Bookmarklets/` directory if not existed already and copies the bookmarklets from `Bookmarks.plist`"
-        
+
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"
     }
