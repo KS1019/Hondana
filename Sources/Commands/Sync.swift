@@ -163,8 +163,8 @@ extension Sync {
 extension Sync {
     enum Constants {
         static let commandName = "sync"
-        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in `~/.Hondana/Bookmarks.plist`"
-        static let discussion = "`hondana sync` first reads the `--from` option to decide whether JavaScript files or Bookmarks.plist should be used as origin. After that, it will read the bookmarklets from the orign to overwrite the ones in the other"
+        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
+        static let discussion = "`hondana sync` first reads the `--from` option to decide which source should be used as origin. After that, it will read the bookmarklets from the orign to sync the bookmarklets"
         
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"
