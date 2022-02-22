@@ -9,21 +9,27 @@ struct Sync: ParsableCommand {
     
     @Option(name: .shortAndLong, help: "Original source for syncing and overwriting bookmarklets in the other.")
     var from: SyncOrigin = .hondanaDir
+    
+    typealias Bookmarklet = (uuid: String, title: String, url: String)
 }
 
 extension Sync {
     func run() throws {
+        let jsContent:  [Bookmarklet]
         switch from {
         case .hondanaDir:
-            let jsContent = readJSContents(from: .hondanaDir)
+            jsContent = readJSContents(from: .hondanaDir)
             write(bookmarklets: jsContent, to: .plist)
         case .plist:
-            let jsContent = readJSContents(from: .plist)
+            jsContent = readJSContents(from: .plist)
+            write(bookmarklets: jsContent, to: .hondanaDir)
+        case .safariHTML:
+            jsContent = readJSContents(from: .safariHTML)
             write(bookmarklets: jsContent, to: .hondanaDir)
         }
     }
     
-    private func readJSContents(from: SyncOrigin) -> [(uuid: String, title: String, url: String)] {
+    private func readJSContents(from: SyncOrigin) -> [Bookmarklet] {
         switch from {
         case .hondanaDir:
             let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
@@ -54,10 +60,52 @@ extension Sync {
                 }
             
             return bookmarklets
+        case .safariHTML:
+            let file = try! Folder(path: Constants.hondanaDirURL).files.first { $0.extension == "html" }!
+            let html = String(data: try! file.read(), encoding: .utf8)!
+            let htmlRange = NSRange(
+                html.startIndex..<html.endIndex,
+                in: html
+            )
+
+            let regex = "<DT><A HREF=\"javascript:(.+)>(.+)</A>"
+            let captureRegex = try! NSRegularExpression(
+                pattern: regex,
+                options: []
+            )
+            
+            let matches = captureRegex.matches(
+                in: html,
+                options: [],
+                range: htmlRange
+            )
+            let bookmarklets: [Bookmarklet] = matches
+                .compactMap { match in
+                    var arr = [String]()
+                    for rangeIndex in 0..<match.numberOfRanges {
+                        let matchRange = match.range(at: rangeIndex)
+                        
+                        // Ignore matching the entire username string
+                        if matchRange == htmlRange { continue }
+                        
+                        // Extract the substring matching the capture group
+                        if let substringRange = Range(matchRange, in: html) {
+                            let capture = String(html[substringRange])
+                            arr.append(capture)
+                        }
+                    }
+                    
+                    return arr
+                }
+                .map { (arr: [String]) in
+                    (uuid: "", title: arr[2], url: arr[1])
+                }
+
+            return bookmarklets
         }
     }
     
-    private func write(bookmarklets: [(uuid: String, title: String, url: String)], to: SyncOrigin) {
+    private func write(bookmarklets: [Bookmarklet], to: SyncOrigin) {
         switch to {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
@@ -98,6 +146,8 @@ extension Sync {
             if let encoded = try? encoder.encode(settings) {
                 try! file.write(encoded)
             }
+        case .safariHTML:
+            fatalError("This Should Not Be Called")
         }
     }
 }
@@ -106,14 +156,15 @@ extension Sync {
     enum SyncOrigin: String, ExpressibleByArgument {
         case hondanaDir
         case plist
+        case safariHTML
     }
 }
 
 extension Sync {
     enum Constants {
         static let commandName = "sync"
-        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in `~/.Hondana/Bookmarks.plist`"
-        static let discussion = "`hondana sync` first reads the `--from` option to decide whether JavaScript files or Bookmarks.plist should be used as origin. After that, it will read the bookmarklets from the orign to overwrite the ones in the other"
+        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
+        static let discussion = "`hondana sync` first reads the `--from` option to decide which source should be used as origin. After that, it will read the bookmarklets from the orign to sync the bookmarklets"
         
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"

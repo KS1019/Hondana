@@ -11,31 +11,28 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
-        let data = try! file.read()
-        let decoder = PropertyListDecoder()
-        let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-        let root = settings.Children!.filter { child in
-            return child.Children != nil
-        }
         var w = winsize()
-        let bookmarklets = root
-            .compactMap { child in
-                child.Children
+        let bookmarklets: [(uuid: String, title: String, url: String)] =
+        try Folder(path: Constants.hondanaDirURL).createSubfolderIfNeeded(at: "Bookmarklets/")
+            .files
+            .filter { $0.extension == "js" }
+            .map { (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                    title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                    url: String(try $0.readAsString(encodedAs: .utf8)
+                        .withoutJSPrefix.minified.prefix(
+                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ?
+                                                         Int(w.ws_col) - 30 : 30)))
             }
-            .flatMap { $0 }
-            .map {
-                (title: $0.URIDictionary?.title, url: $0.URLString?.prefix(ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ? Int(w.ws_col) - 30 : 30))
-            }
-            .filter {
-                $0.url!.hasPrefix("javascript")
-            }
+        guard !bookmarklets.isEmpty else {
+            print("No bookmarklet exist")
+            return
+        }
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
         
         bookmarklets.forEach { bookmarklet in
-            table.addRow(values: [bookmarklet.title!, String(bookmarklet.url! + "...").red])
+            table.addRow(values: [bookmarklet.title, String(bookmarklet.url + "...").red])
         }
         
         print(table.render())
@@ -45,8 +42,8 @@ extension List {
 extension List {
     enum Constants {
         static let commandName = "list"
-        static let abstract = "`hondana list` lists every bookmarklet present in `Bookmarks.plist`"
-        static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarks.plist`, reads the plist, and outputs the filtered result in the table."
+        static let abstract = "`hondana list` lists every bookmarklet present in `~/.Hondana/Bookmarklets/`"
+        static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."
         
         static let hondanaDirURL = "~/.Hondana/"
     }
