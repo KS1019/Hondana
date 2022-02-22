@@ -5,6 +5,17 @@ import class Foundation.Bundle
 import AssertSwiftCLI
 
 final class HondanaTests: XCTestCase {
+    var hondaDirExistsPrev = false
+    override func setUpWithError() throws {
+        hondaDirExistsPrev = try Folder(path: "~/").containsSubfolder(named: ".Hondana")
+        try Folder(path: "~").createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+    }
+    
+    override func tearDownWithError() throws {
+        guard !hondaDirExistsPrev else { return }
+        try Folder(path: "~/.Hondana").delete()
+    }
+    
     func testVersionFlag() throws {
         try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6-d")
     }
