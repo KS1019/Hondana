@@ -5,66 +5,27 @@ import Models
 import Extensions
 
 struct Init: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
+    static let configuration = CommandConfiguration(commandName: Constants.Init.commandName,
+                                                    abstract: Constants.Init.abstract,
+                                                    discussion: Constants.Init.discussion)
 }
 
 extension Init {
     func run() throws {
         let folder = try Folder(path: Constants.hondanaDirURL).createSubfolder(at: Constants.bookmarkletsURL)
         if folder.isEmpty() {
-            let jsContent = try readJSContents()
-            try write(bookmarklets: jsContent)
+            let jsContent = try Utils.readJSContents(from: .plist)
+            try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
         } else {
             print("hondana already run. Aborting Init.")
         }
     }
-
-    private func readJSContents() throws -> [(uuid: String, title: String, url: String)] {
-        let file = try Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
-        let data = try file.read()
-        let decoder = PropertyListDecoder()
-        let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-        let root = settings.Children!.filter { child in
-            return child.Children != nil
-        }
-
-        let bookmarklets = root
-            .compactMap { child in
-                child.Children
-            }
-            .flatMap { $0 }
-            .filter {
-                $0.URLString!.hasPrefix("javascript")
-            }
-            .map {
-                (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
-            }
-
-        return bookmarklets
-    }
-
-    private func write(bookmarklets: [(uuid: String, title: String, url: String)]) throws {
-        let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
-
-        try bookmarklets
-            .forEach {
-                if folder.containsFile(named: "\($0.uuid)+\($0.title).js") {
-                    let file = try folder.file(named: "\($0.uuid)+\($0.title).js")
-                    try file.write($0.url, encoding: .utf8)
-                } else {
-                    try folder.createFile(at: "\($0.uuid)+\($0.title).js", contents: $0.url.data(using: .utf8))
-                }
-            }
-    }
 }
 
-extension Init {
-    enum Constants {
+extension Constants {
+    enum Init {
         static let commandName = "init"
         static let abstract = "`hondana init` initilizes `~/.Hondana/Bookmarklets/` directory."
         static let discussion = "`hondana init` creates `Bookmarklets/` directory if not existed already and copies the bookmarklets from `Bookmarks.plist`"
-
-        static let bookmarkletsURL = "Bookmarklets/"
-        static let hondanaDirURL = "~/.Hondana/"
     }
 }

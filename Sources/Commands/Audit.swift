@@ -3,7 +3,9 @@
 import ArgumentParser
 
 struct Audit: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
+    static let configuration = CommandConfiguration(commandName: Constants.Audit.commandName,
+                                                    abstract: Constants.Audit.abstract,
+                                                    discussion: Constants.Audit.discussion)
 }
 
 extension Audit {
@@ -12,8 +14,8 @@ extension Audit {
     }
 }
 
-extension Audit {
-    enum Constants {
+extension Constants {
+    enum Audit {
         static let commandName = ""
         static let abstract = ""
         static let discussion = ""
