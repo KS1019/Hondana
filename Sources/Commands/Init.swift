@@ -12,8 +12,8 @@ extension Init {
     func run() throws {
         let folder = try Folder(path: Constants.hondanaDirURL).createSubfolder(at: Constants.bookmarkletsURL)
         if folder.isEmpty() {
-            let jsContent = try readJSContents()
-            try write(bookmarklets: jsContent)
+            let jsContent = try Utils.readJSContents(from: .plist)
+            try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
         } else {
             print("hondana already run. Aborting Init.")
         }
