@@ -5,28 +5,46 @@ import SwiftyTextTable
 import Rainbow
 import Models
 
+#if canImport(AppKit)
+import AppKit
+#endif
+
 struct List: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
+
+#if canImport(AppKit)
+    @Flag(help: "List the bookmarklets on Safari browser")
+    var onSafari = false
+#endif
 }
 
 extension List {
     func run() throws {
-        var w = winsize()
-        let bookmarklets: [(uuid: String, title: String, url: String)] =
-        try Folder(path: Constants.hondanaDirURL).createSubfolderIfNeeded(at: "Bookmarklets/")
+        let jsFiles = try Folder(path: Constants.hondanaDirURL)
+            .createSubfolderIfNeeded(at: "Bookmarklets/")
             .files
             .filter { $0.extension == "js" }
+        guard !jsFiles.isEmpty else {
+            print("No bookmarklet exist")
+            return
+        }
+        #if canImport(AppKit)
+        guard !onSafari else {
+            let htmlFile = try Utils.generateHTML(from: jsFiles)
+            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: URL(string: "file://~/Applications/Safari.app")!, configuration: [:])
+            return
+        }
+        #endif
+        var winsize = winsize()
+        let bookmarklets: [(uuid: String, title: String, url: String)] =
+        try jsFiles
             .map { (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
                     title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
                     url: String(try $0.readAsString(encodedAs: .utf8)
                         .withoutJSPrefix.minified.prefix(
-                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ?
-                                                         Int(w.ws_col) - 30 : 30)))
+                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
+                            Int(winsize.ws_col) - 30 : 30)))
             }
-        guard !bookmarklets.isEmpty else {
-            print("No bookmarklet exist")
-            return
-        }
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
         var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
