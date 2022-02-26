@@ -18,31 +18,31 @@ extension Sync {
         let jsContent: [Bookmarklet]
         switch from {
         case .hondanaDir:
-            jsContent = readJSContents(from: .hondanaDir)
-            write(bookmarklets: jsContent, to: .plist)
+            jsContent = try readJSContents(from: .hondanaDir)
+            try write(bookmarklets: jsContent, to: .plist)
         case .plist:
-            jsContent = readJSContents(from: .plist)
-            write(bookmarklets: jsContent, to: .hondanaDir)
+            jsContent = try readJSContents(from: .plist)
+            try write(bookmarklets: jsContent, to: .hondanaDir)
         case .safariHTML:
-            jsContent = readJSContents(from: .safariHTML)
-            write(bookmarklets: jsContent, to: .hondanaDir)
+            jsContent = try readJSContents(from: .safariHTML)
+            try write(bookmarklets: jsContent, to: .hondanaDir)
         }
     }
 
-    private func readJSContents(from: SyncOrigin) -> [Bookmarklet] {
+    private func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
         switch from {
         case .hondanaDir:
-            let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
+            let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
             let jsFiles = folder.files.filter { $0.extension == "js" }
-            return jsFiles
+            return try jsFiles
                 .map {
-                    (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try! $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
+                    (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
                 }
         case .plist:
-            let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
-            let data = try! file.read()
+            let file = try Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
+            let data = try file.read()
             let decoder = PropertyListDecoder()
-            let settings: Bookmark = try! decoder.decode(Bookmark.self, from: data)
+            let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
             let root = settings.Children!.filter { child in
                 return child.Children != nil
             }
@@ -61,15 +61,15 @@ extension Sync {
 
             return bookmarklets
         case .safariHTML:
-            let file = try! Folder(path: Constants.hondanaDirURL).files.first { $0.extension == "html" }!
-            let html = String(data: try! file.read(), encoding: .utf8)!
+            let file = try Folder(path: Constants.hondanaDirURL).files.first { $0.extension == "html" }!
+            let html = String(data: try file.read(), encoding: .utf8)!
             let htmlRange = NSRange(
                 html.startIndex..<html.endIndex,
                 in: html
             )
 
             let regex = "<DT><A HREF=\"javascript:(.+)>(.+)</A>"
-            let captureRegex = try! NSRegularExpression(
+            let captureRegex = try NSRegularExpression(
                 pattern: regex,
                 options: []
             )
@@ -105,34 +105,34 @@ extension Sync {
         }
     }
 
-    private func write(bookmarklets: [Bookmarklet], to: SyncOrigin) {
+    private func write(bookmarklets: [Bookmarklet], to: SyncOrigin) throws {
         switch to {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
             // FIXME: Bookmarklets/ are assumed to be accessible. Throw an error if not.
-            let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
+            let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
 
             // FIXME: This can be super slow as the number of bookmarklets grows
-            bookmarklets
+            try bookmarklets
                 .forEach { bookmarklet in
                     if folder.files.count() > 0 {
-                        folder.files.forEach { file in
+                        try folder.files.forEach { file in
                             if file.nameExcludingExtension.contains(bookmarklet.uuid) {
-                                try! file.rename(to: "\(bookmarklet.uuid)+\(bookmarklet.title)")
-                                try! file.write(bookmarklet.url, encoding: .utf8)
+                                try file.rename(to: "\(bookmarklet.uuid)+\(bookmarklet.title)")
+                                try file.write(bookmarklet.url, encoding: .utf8)
                             } else {
-                                try! folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
+                                try folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
                             }
                         }
                     } else {
-                        try! folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
+                        try folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
                     }
                 }
         case .plist:
-            let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
-            let data = try! file.read()
+            let file = try Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
+            let data = try file.read()
             let decoder = PropertyListDecoder()
-            var settings: Bookmark = try! decoder.decode(Bookmark.self, from: data)
+            var settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
 
             bookmarklets.forEach {
                 let newBookmarklet = Bookmark(WebBookmarkUUID: $0.uuid, WebBookmarkType: "WebBookmarkTypeLeaf", URLString: $0.url, URIDictionary: URIDictionary(title: $0.title))
@@ -144,7 +144,7 @@ extension Sync {
             }
             let encoder = PropertyListEncoder()
             if let encoded = try? encoder.encode(settings) {
-                try! file.write(encoded)
+                try file.write(encoded)
             }
         case .safariHTML:
             fatalError("This Should Not Be Called")
