@@ -10,20 +10,20 @@ struct Init: ParsableCommand {
 
 extension Init {
     func run() throws {
-        let folder = try! Folder(path: Constants.hondanaDirURL).createSubfolder(at: Constants.bookmarkletsURL)
+        let folder = try Folder(path: Constants.hondanaDirURL).createSubfolder(at: Constants.bookmarkletsURL)
         if folder.isEmpty() {
-            let jsContent = readJSContents()
-            write(bookmarklets: jsContent)
+            let jsContent = try readJSContents()
+            try write(bookmarklets: jsContent)
         } else {
             print("hondana already run. Aborting Init.")
         }
     }
 
-    private func readJSContents() -> [(uuid: String, title: String, url: String)] {
-        let file = try! Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
-        let data = try! file.read()
+    private func readJSContents() throws -> [(uuid: String, title: String, url: String)] {
+        let file = try Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
+        let data = try file.read()
         let decoder = PropertyListDecoder()
-        let settings: Bookmark = try! decoder.decode(Bookmark.self, from: data)
+        let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
         let root = settings.Children!.filter { child in
             return child.Children != nil
         }
@@ -43,16 +43,16 @@ extension Init {
         return bookmarklets
     }
 
-    private func write(bookmarklets: [(uuid: String, title: String, url: String)]) {
-        let folder = try! Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
+    private func write(bookmarklets: [(uuid: String, title: String, url: String)]) throws {
+        let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
 
-        bookmarklets
+        try bookmarklets
             .forEach {
                 if folder.containsFile(named: "\($0.uuid)+\($0.title).js") {
-                    let file = try! folder.file(named: "\($0.uuid)+\($0.title).js")
-                    try! file.write($0.url, encoding: .utf8)
+                    let file = try folder.file(named: "\($0.uuid)+\($0.title).js")
+                    try file.write($0.url, encoding: .utf8)
                 } else {
-                    try! folder.createFile(at: "\($0.uuid)+\($0.title).js", contents: $0.url.data(using: .utf8))
+                    try folder.createFile(at: "\($0.uuid)+\($0.title).js", contents: $0.url.data(using: .utf8))
                 }
             }
     }
