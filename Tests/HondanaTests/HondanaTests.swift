@@ -67,7 +67,7 @@ final class HondanaTests: XCTestCase {
         `hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it,
         and outputs the filtered result in the table.
         
-        USAGE: hondana list [--on-safari]
+        USAGE: hondana list
         
         OPTIONS:
           --version               Show the version.
