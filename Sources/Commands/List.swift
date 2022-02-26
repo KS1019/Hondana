@@ -35,15 +35,15 @@ extension List {
             return
         }
         #endif
-        var w = winsize()
+        var winsize = winsize()
         let bookmarklets: [(uuid: String, title: String, url: String)] =
         try jsFiles
             .map { (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
                     title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
                     url: String(try $0.readAsString(encodedAs: .utf8)
                         .withoutJSPrefix.minified.prefix(
-                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 ?
-                            Int(w.ws_col) - 30 : 30)))
+                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
+                            Int(winsize.ws_col) - 30 : 30)))
             }
         let titleCol = TextTableColumn(header: "Title".bold)
         let urlCol = TextTableColumn(header: "URL".bold)
