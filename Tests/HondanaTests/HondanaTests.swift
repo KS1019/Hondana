@@ -17,7 +17,7 @@ final class HondanaTests: XCTestCase {
     }
 
     func testVersionFlag() throws {
-        try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6-d")
+        try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6")
     }
 
     // swiftlint:disable line_length
