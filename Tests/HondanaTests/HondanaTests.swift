@@ -26,7 +26,7 @@ final class HondanaTests: XCTestCase {
         try AssertExecuteCommand(command: "hondana list", expected: """
             No bookmarklet exist
             """)
-        
+
         // 1 Bookmarklet
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
         try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
@@ -39,21 +39,21 @@ final class HondanaTests: XCTestCase {
             | test  | (alert(%22testing%22))()%3B%0A... |
             +-------+-----------------------------------+
             """)
-        
+
         try File(path: "~/.Hondana/Bookmarklets/+test.js").delete()
     }
-    
+
     func testHelp() throws {
         #if canImport(AppKit)
         try AssertExecuteCommand(command: "hondana list --help", expected: """
         OVERVIEW: `hondana list` lists every bookmarklet present in
         `~/.Hondana/Bookmarklets/`
-        
+
         `hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it,
         and outputs the filtered result in the table.
-        
+
         USAGE: hondana list [--on-safari]
-        
+
         OPTIONS:
           --on-safari             List the bookmarklets on Safari browser
           --version               Show the version.
@@ -63,12 +63,12 @@ final class HondanaTests: XCTestCase {
         try AssertExecuteCommand(command: "hondana list --help", expected: """
         OVERVIEW: `hondana list` lists every bookmarklet present in
         `~/.Hondana/Bookmarklets/`
-        
+
         `hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it,
         and outputs the filtered result in the table.
-        
+
         USAGE: hondana list
-        
+
         OPTIONS:
           --version               Show the version.
           -h, --help              Show help information.
