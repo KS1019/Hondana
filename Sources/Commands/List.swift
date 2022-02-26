@@ -10,7 +10,9 @@ import AppKit
 #endif
 
 struct List: ParsableCommand {
-    static let configuration = CommandConfiguration(commandName: Constants.commandName, abstract: Constants.abstract, discussion: Constants.discussion)
+    static let configuration = CommandConfiguration(commandName: Constants.List.commandName,
+                                                    abstract: Constants.List.abstract,
+                                                    discussion: Constants.List.discussion)
 
 #if canImport(AppKit)
     @Flag(help: "List the bookmarklets on Safari browser")
@@ -57,8 +59,8 @@ extension List {
     }
 }
 
-extension List {
-    enum Constants {
+extension Constants {
+    enum List {
         static let commandName = "list"
         static let abstract = "`hondana list` lists every bookmarklet present in `~/.Hondana/Bookmarklets/`"
         static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."

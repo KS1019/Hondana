@@ -3,15 +3,15 @@ import ArgumentParser
 @main
 struct Hondana: ParsableCommand {
     static var configuration = CommandConfiguration(
-        commandName: Constants.commandName, abstract: Constants.abstract,
-        discussion: Constants.discussion, version: version,
+        commandName: Constants.Hondana.commandName, abstract: Constants.Hondana.abstract,
+        discussion: Constants.Hondana.discussion, version: version,
         subcommands: [
             Sync.self, List.self, Init.self
         ])
 }
 
-extension Hondana {
-    enum Constants {
+extension Constants {
+    enum Hondana {
         static let commandName = "hondana"
         static let abstract = "`hondana` helps you manage bookmarklets."
         static let discussion = """
