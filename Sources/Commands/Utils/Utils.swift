@@ -48,7 +48,7 @@ enum Utils {
             let root = settings.Children!.filter { child in
                 return child.Children != nil
             }
-            
+
             let bookmarklets = root
                 .compactMap { child in
                     child.Children
@@ -60,7 +60,7 @@ enum Utils {
                 .map {
                     (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
                 }
-            
+
             return bookmarklets
         case .safariHTML:
             let file = try Folder(path: Constants.hondanaDirURL).files.first { $0.extension == "html" }!
@@ -69,13 +69,13 @@ enum Utils {
                 html.startIndex..<html.endIndex,
                 in: html
             )
-            
+
             let regex = "<DT><A HREF=\"javascript:(.+)>(.+)</A>"
             let captureRegex = try NSRegularExpression(
                 pattern: regex,
                 options: []
             )
-            
+
             let matches = captureRegex.matches(
                 in: html,
                 options: [],
@@ -86,34 +86,34 @@ enum Utils {
                     var arr = [String]()
                     for rangeIndex in 0..<match.numberOfRanges {
                         let matchRange = match.range(at: rangeIndex)
-                        
+
                         // Ignore matching the entire username string
                         if matchRange == htmlRange { continue }
-                        
+
                         // Extract the substring matching the capture group
                         if let substringRange = Range(matchRange, in: html) {
                             let capture = String(html[substringRange])
                             arr.append(capture)
                         }
                     }
-                    
+
                     return arr
                 }
                 .map { (arr: [String]) in
                     (uuid: "", title: arr[2], url: arr[1])
                 }
-            
+
             return bookmarklets
         }
     }
-    
+
     static func write(bookmarklets: [Bookmarklet], to: SyncOrigin) throws {
         switch to {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
             // FIXME: Bookmarklets/ are assumed to be accessible. Throw an error if not.
             let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
-            
+
             // FIXME: This can be super slow as the number of bookmarklets grows
             try bookmarklets
                 .forEach { bookmarklet in
@@ -135,7 +135,7 @@ enum Utils {
             let data = try file.read()
             let decoder = PropertyListDecoder()
             var settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-            
+
             bookmarklets.forEach {
                 let newBookmarklet = Bookmark(WebBookmarkUUID: $0.uuid, WebBookmarkType: "WebBookmarkTypeLeaf", URLString: $0.url, URIDictionary: URIDictionary(title: $0.title))
                 if let index = settings.Children![1].Children!.firstIndex(where: { bookmarklet in newBookmarklet.WebBookmarkUUID == bookmarklet.WebBookmarkUUID }) {
@@ -152,7 +152,7 @@ enum Utils {
             fatalError("This Should Not Be Called")
         }
     }
-    
+
     enum SyncOrigin: String, ExpressibleByArgument {
         case hondanaDir
         case plist
