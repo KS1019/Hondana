@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Codable Representaion for `Bookmarks.plist`
 struct BookmarksPlist: Codable {
     var Root: [String: Bookmark]
 }

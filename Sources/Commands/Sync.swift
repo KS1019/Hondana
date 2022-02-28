@@ -15,7 +15,7 @@ struct Sync: ParsableCommand {
 
 extension Sync {
     func run() throws {
-        let jsContent: [Utils.Bookmarklet]
+        let jsContent: [Bookmarklet]
         switch from {
         case .hondanaDir:
             jsContent = try Utils.readJSContents(from: .hondanaDir)

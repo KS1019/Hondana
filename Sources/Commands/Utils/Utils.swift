@@ -12,11 +12,12 @@ enum Utils {
             <h1>Bookmarklets</h1>
             """ +
         (try jsFiles
-            .map { jsFile in
-                return aTag(url: try jsFile.readAsString(encodedAs: .utf8).withJSPrefix.minified,
-                            title: jsFile.nameExcludingExtension.components(separatedBy: "+")[1])
+            .map {
+                aTag(url: try $0.readAsString(encodedAs: .utf8).withJSPrefix.minified,
+                     title: $0.nameExcludingExtension.components(separatedBy: "+")[1])
             }
-            .joined(separator: "\n"))
+            .joined(separator: "\n")
+        )
         + """
             </html>
             """
@@ -28,8 +29,6 @@ enum Utils {
     private static func aTag(url: String, title: String) -> String {
         return "<a href=\"\(url)\">\(title)</a>"
     }
-
-    typealias Bookmarklet = (uuid: String, title: String, url: String)
 
     static func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
         switch from {
