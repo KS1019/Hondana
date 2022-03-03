@@ -23,9 +23,7 @@ final class HondanaTests: XCTestCase {
     // swiftlint:disable line_length
     func testList() throws {
         // No Bookmarklets
-        try AssertExecuteCommand(command: "hondana list", expected: """
-            No bookmarklet exist
-            """)
+        try AssertExecuteCommand(command: "hondana list", expected: "No bookmarklet exist")
 
         // 1 Bookmarklet
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")

@@ -28,7 +28,7 @@ extension List {
             .filter { $0.extension == "js" }
         guard !jsFiles.isEmpty else {
             print("No bookmarklet exist")
-            throw ExitCode.failure
+            return
         }
         #if canImport(AppKit)
         guard !onSafari else {
