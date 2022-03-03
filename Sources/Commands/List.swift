@@ -33,7 +33,7 @@ extension List {
         #if canImport(AppKit)
         guard !onSafari else {
             let htmlFile = try Utils.generateHTML(from: jsFiles)
-            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL , configuration: [:])
+            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
             return
         }
         #endif
