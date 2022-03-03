@@ -30,8 +30,8 @@ let package = Package(
                 "SwiftyTextTable",
                 "Extensions",
             ]),
-        .target(name: "Models"),
-        .target(name: "Extensions"),
+        .target(name: "Models", dependencies: ["Extensions", "Files"]),
+        .target(name: "Extensions", dependencies: ["Files"]),
         .testTarget(
             name: "HondanaTests",
             dependencies: ["Commands", "AssertSwiftCLI"]),

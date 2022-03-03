@@ -35,9 +35,9 @@ enum Utils {
         case .hondanaDir:
             let folder = try Folder(path: Constants.hondanaDirURL + Constants.bookmarkletsURL)
             let jsFiles = folder.files.filter { $0.extension == "js" }
-            return try jsFiles
-                .map {
-                    (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!, title: $0.nameExcludingExtension.components(separatedBy: "+")[1], url: try $0.readAsString(encodedAs: .utf8).withJSPrefix.minified)
+            return jsFiles
+                .compactMap {
+                    Bookmarklet(file: $0)
                 }
         case .plist:
             let file = try Folder(path: Constants.hondanaDirURL).file(named: "Bookmarks.plist")
@@ -57,7 +57,7 @@ enum Utils {
                     $0.URLString!.hasPrefix("javascript")
                 }
                 .map {
-                    (uuid: $0.WebBookmarkUUID, title: $0.URIDictionary!.title, url: $0.URLString!.withoutJSPrefix.unminified)
+                    Bookmarklet(bookmark: $0)
                 }
 
             return bookmarklets
@@ -99,7 +99,7 @@ enum Utils {
                     return arr
                 }
                 .map { (arr: [String]) in
-                    (uuid: "", title: arr[2], url: arr[1])
+                    Bookmarklet(uuid: "", title: arr[2], url: arr[1])
                 }
 
             return bookmarklets
