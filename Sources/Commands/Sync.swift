@@ -15,7 +15,7 @@ struct Sync: ParsableCommand {
 
 extension Sync {
     func run() throws {
-        let jsContent: [Utils.Bookmarklet]
+        let jsContent: [Bookmarklet]
         switch from {
         case .hondanaDir:
             jsContent = try Utils.readJSContents(from: .hondanaDir)
@@ -33,9 +33,11 @@ extension Sync {
 extension Constants {
     enum Sync {
         static let commandName = "sync"
-        static let abstract = "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
-        static let discussion = "`hondana sync` first reads the `--from` option to decide which source should be used as origin. After that, it will read the bookmarklets from the orign to sync the bookmarklets"
-
+        static let abstract =
+        "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
+        static let discussion =
+        "`hondana sync` first reads the `--from` option to decide which source should be used as origin."
+        + "After that, it will read the bookmarklets from the orign to sync the bookmarklets"
         static let bookmarkletsURL = "Bookmarklets/"
         static let hondanaDirURL = "~/.Hondana/"
     }

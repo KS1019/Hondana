@@ -33,7 +33,7 @@ extension List {
         #if canImport(AppKit)
         guard !onSafari else {
             let htmlFile = try Utils.generateHTML(from: jsFiles)
-            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: URL(string: "file://~/Applications/Safari.app")!, configuration: [:])
+            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
             return
         }
         #endif
@@ -66,5 +66,7 @@ extension Constants {
         static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."
 
         static let hondanaDirURL = "~/.Hondana/"
+
+        static let safariAppURL = URL(string: "file://~/Applications/Safari.app")!
     }
 }
