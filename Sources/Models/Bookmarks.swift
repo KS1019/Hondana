@@ -5,6 +5,8 @@
 //  Created by Kotaro Suto on 2021/10/08.
 //
 
+// Using a upper case to follow the format of the plist
+// swiftlint:disable identifier_name
 import Foundation
 
 /// Codable Representaion for `Bookmarks.plist`
@@ -12,8 +14,6 @@ struct BookmarksPlist: Codable {
     var Root: [String: Bookmark]
 }
 
-// Using a upper case to follow the format of the plist
-// swiftlint: disable identifier_name
 public struct Bookmark: Codable {
     public init(
         WebBookmarkUUID: String,
