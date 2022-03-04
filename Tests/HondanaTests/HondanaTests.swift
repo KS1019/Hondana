@@ -7,13 +7,11 @@ import AssertSwiftCLI
 final class HondanaTests: XCTestCase {
     var hondaDirExistsPrev = false
     override func setUpWithError() throws {
-        hondaDirExistsPrev = try Folder(path: "~/").containsSubfolder(named: ".Hondana")
-        try Folder(path: "~").createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+        try Constants.rootFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
     }
 
     override func tearDownWithError() throws {
-        guard !hondaDirExistsPrev else { return }
-        try Folder(path: "~/.Hondana").delete()
+        try Constants.hondanaFolder.delete()
     }
 
     func testVersionFlag() throws {
@@ -27,7 +25,7 @@ final class HondanaTests: XCTestCase {
 
         // 1 Bookmarklet
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
-        try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
+        try Constants.bookmarkletsFolder.createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
         try AssertExecuteCommand(command: "hondana list", expected: """
             +-------------------------------------------+
             | Bookmarklets                              |
@@ -38,7 +36,7 @@ final class HondanaTests: XCTestCase {
             +-------+-----------------------------------+
             """)
 
-        try File(path: "~/.Hondana/Bookmarklets/+test.js").delete()
+        try Constants.bookmarkletsFolder.file(named: "+test.js").delete()
     }
 
     func testHelp() throws {
@@ -84,5 +82,24 @@ final class HondanaTests: XCTestCase {
       #else
         return Bundle.main.bundleURL
       #endif
+    }
+
+    enum Constants {
+        static let rootDir = "~/"
+        static let hondanaDir = ".Hondana/"
+        static let bookmarkletsDir = "Bookmarklets/"
+
+        // swiftlint:disable force_try
+        static var rootFolder: Folder {
+            if ProcessInfo.processInfo.environment["CI"] == nil
+                && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+                return Folder.temporary
+            } else {
+                return try! Folder(path: rootDir)
+            }
+        }
+
+        static let hondanaFolder: Folder = try! rootFolder.subfolder(at: hondanaDir)
+        static let bookmarkletsFolder: Folder = try! hondanaFolder.subfolder(at: bookmarkletsDir)
     }
 }

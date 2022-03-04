@@ -21,7 +21,7 @@ enum Utils {
         + """
             </html>
             """
-        return try Folder(path: Constants.hondanaDirPath)
+        return try Constants.hondanaFolder
             .createFile(at: "bookmarklets.html", contents: rawHTMLstring.data(using: .utf8))
     }
 
@@ -32,14 +32,14 @@ enum Utils {
     static func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
         switch from {
         case .hondanaDir:
-            let folder = try Folder(path: Constants.bookmarkletsDirPath)
+            let folder = Constants.bookmarkletsFolder
             let jsFiles = folder.files.filter { $0.extension == "js" }
             return jsFiles
                 .compactMap {
                     Bookmarklet(file: $0)
                 }
         case .plist:
-            let file = try Folder(path: Constants.hondanaDirPath).file(named: "Bookmarks.plist")
+            let file = try Constants.hondanaFolder.file(named: "Bookmarks.plist")
             let data = try file.read()
             let decoder = PropertyListDecoder()
             let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
@@ -61,7 +61,7 @@ enum Utils {
 
             return bookmarklets
         case .safariHTML:
-            let file = try Folder(path: Constants.hondanaDirPath)
+            let file = Constants.hondanaFolder
                 .files.first { $0.extension == "html" }!
             let html = String(data: try file.read(), encoding: .utf8)!
             let htmlRange = NSRange(
@@ -111,7 +111,7 @@ enum Utils {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
             // FIXME: Bookmarklets/ are assumed to be accessible. Throw an error if not.
-            let folder = try Folder(path: Constants.bookmarkletsDirPath)
+            let folder = Constants.bookmarkletsFolder
 
             // FIXME: This can be super slow as the number of bookmarklets grows
             try bookmarklets
@@ -130,7 +130,7 @@ enum Utils {
                     }
                 }
         case .plist:
-            let file = try Folder(path: Constants.hondanaDirPath).file(named: "Bookmarks.plist")
+            let file = try Constants.hondanaFolder.file(named: "Bookmarks.plist")
             let data = try file.read()
             let decoder = PropertyListDecoder()
             var settings: Bookmark = try decoder.decode(Bookmark.self, from: data)

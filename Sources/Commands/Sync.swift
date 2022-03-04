@@ -39,6 +39,5 @@ extension Constants {
         "`hondana sync` first reads the `--from` option to decide which source should be used as origin."
         + "After that, it will read the bookmarklets from the orign to sync the bookmarklets"
         static let bookmarkletsURL = "Bookmarklets/"
-        static let hondanaDirURL = "~/.Hondana/"
     }
 }

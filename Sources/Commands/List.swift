@@ -22,7 +22,7 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let jsFiles = try Folder(path: Constants.bookmarkletsDirPath)
+        let jsFiles = Constants.bookmarkletsFolder
             .files
             .filter { $0.extension == "js" }
         guard !jsFiles.isEmpty else {
@@ -63,8 +63,6 @@ extension Constants {
         static let commandName = "list"
         static let abstract = "`hondana list` lists every bookmarklet present in `~/.Hondana/Bookmarklets/`"
         static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."
-
-        static let hondanaDirURL = "~/.Hondana/"
 
         static let safariAppURL = URL(string: "file://~/Applications/Safari.app")!
     }

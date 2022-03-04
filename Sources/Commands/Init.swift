@@ -13,7 +13,8 @@ struct Init: ParsableCommand {
 extension Init {
     func run() throws {
         let folder = try Constants.rootFolder
-            .createSubfolderIfNeeded(at: Constants.bookmarkletsDirPath)
+            .createSubfolderIfNeeded(at: Constants.hondanaDir)
+            .createSubfolderIfNeeded(at: Constants.bookmarkletsDir)
         if folder.isEmpty() {
             let jsContent = try Utils.readJSContents(from: .plist)
             try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
