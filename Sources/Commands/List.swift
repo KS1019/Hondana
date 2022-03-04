@@ -22,8 +22,7 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let jsFiles = try Folder(path: Constants.hondanaDirURL)
-            .createSubfolderIfNeeded(at: "Bookmarklets/")
+        let jsFiles = try Folder(path: Constants.bookmarkletsDirPath)
             .files
             .filter { $0.extension == "js" }
         guard !jsFiles.isEmpty else {
