@@ -7,13 +7,11 @@ import AssertSwiftCLI
 final class HondanaTests: XCTestCase {
     var hondaDirExistsPrev = false
     override func setUpWithError() throws {
-        hondaDirExistsPrev = try Folder(path: "~/").containsSubfolder(named: ".Hondana")
-        try Folder(path: "~").createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+        try Constants.rootFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
     }
 
     override func tearDownWithError() throws {
-        guard !hondaDirExistsPrev else { return }
-        try Folder(path: "~/.Hondana").delete()
+        try Constants.hondanaFolder.delete()
     }
 
     func testVersionFlag() throws {
@@ -27,7 +25,7 @@ final class HondanaTests: XCTestCase {
 
         // 1 Bookmarklet
         let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
-        try Folder(path: "~/.Hondana/Bookmarklets/").createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
+        try Constants.bookmarkletsFolder.createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
         try AssertExecuteCommand(command: "hondana list", expected: """
             +-------------------------------------------+
             | Bookmarklets                              |
@@ -38,7 +36,7 @@ final class HondanaTests: XCTestCase {
             +-------+-----------------------------------+
             """)
 
-        try File(path: "~/.Hondana/Bookmarklets/+test.js").delete()
+        try Constants.bookmarkletsFolder.file(named: "+test.js").delete()
     }
 
     func testHelp() throws {
