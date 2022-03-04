@@ -9,6 +9,6 @@ enum Constants {
     static let hondanaDirPath = rootDir + hondanaDir
     static let bookmarkletsDirPath = rootDir + hondanaDir + bookmarkletsDir
 
-    // swiftlint: disable force_try
+    // swiftlint:disable force_try
     static let rootFolder = try! Folder(path: rootDir)
 }
