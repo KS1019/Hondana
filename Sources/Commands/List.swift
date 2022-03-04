@@ -22,7 +22,7 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let jsFiles = try Folder(path: Constants.bookmarkletsDirPath)
+        let jsFiles = Constants.bookmarkletsFolder
             .files
             .filter { $0.extension == "js" }
         guard !jsFiles.isEmpty else {
