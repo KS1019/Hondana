@@ -9,9 +9,6 @@ final class FilesExtensionsTests: XCTestCase {
     
     func testExtensions() throws {
         let bookmarksHtmlFile = try File(path: #file).parent!.parent!.file(at: "Fixtures/+test.js")
-        print(bookmarksHtmlFile.nameExcludingExtension)
-        print(bookmarksHtmlFile.extension)
-        print(try bookmarksHtmlFile.readAsString())
 
         XCTAssertTrue(bookmarksHtmlFile.isBookmarklet)
     }
