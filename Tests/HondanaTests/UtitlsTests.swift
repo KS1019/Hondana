@@ -5,8 +5,12 @@ import Files
 import AssertSwiftCLI
 
 final class UtilsTests: XCTestCase {
+    override func setUpWithError() throws {
+        try Constants.homeFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+    }
+
     override func tearDownWithError() throws {
-        try Constants.hondanaFolder.files.forEach { try $0.delete() }
+        try Constants.hondanaFolder.delete()
     }
 
     enum Utils {
