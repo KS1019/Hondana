@@ -21,10 +21,12 @@ extension Sync {
             jsContent = try Utils.readJSContents(from: .hondanaDir)
             try Utils.write(bookmarklets: jsContent, to: .plist)
         case .plist:
-            jsContent = try Utils.readJSContents(from: .plist)
+            jsContent = (try Utils.readJSContents(from: .plist))
+                .map { Bookmarklet(uuid: $0.uuid, title: $0.title, url: $0.url.unminified) }
             try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
         case .safariHTML:
-            jsContent = try Utils.readJSContents(from: .safariHTML)
+            jsContent = (try Utils.readJSContents(from: .safariHTML))
+                .map { Bookmarklet(uuid: $0.uuid, title: $0.title, url: $0.url.unminified) }
             try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
         }
     }
