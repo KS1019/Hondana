@@ -7,7 +7,7 @@ import AssertSwiftCLI
 final class HondanaTests: XCTestCase {
     var hondaDirExistsPrev = false
     override func setUpWithError() throws {
-        try Constants.rootFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+        try Constants.homeFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
     }
 
     override func tearDownWithError() throws {
@@ -24,8 +24,8 @@ final class HondanaTests: XCTestCase {
         try AssertExecuteCommand(command: "hondana list", expected: "No bookmarklet exist")
 
         // 1 Bookmarklet
-        let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
-        try Constants.bookmarkletsFolder.createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
+        let bookmarkletJS = try File(path: #file).parent!.parent!.file(at: "Fixtures/+test.js")
+        try bookmarkletJS.copy(to: Constants.bookmarkletsFolder)
         try AssertExecuteCommand(command: "hondana list", expected: """
             +-------------------------------------------+
             | Bookmarklets                              |
@@ -83,23 +83,24 @@ final class HondanaTests: XCTestCase {
         return Bundle.main.bundleURL
       #endif
     }
+}
 
+extension XCTest {
     enum Constants {
-        static let rootDir = "~/"
         static let hondanaDir = ".Hondana/"
         static let bookmarkletsDir = "Bookmarklets/"
 
         // swiftlint:disable force_try
-        static var rootFolder: Folder {
+        static var homeFolder: Folder {
             if ProcessInfo.processInfo.environment["CI"] == nil
                 && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
                 return Folder.temporary
             } else {
-                return try! Folder(path: rootDir)
+                return Folder.home
             }
         }
 
-        static let hondanaFolder: Folder = try! rootFolder.subfolder(at: hondanaDir)
-        static let bookmarkletsFolder: Folder = try! hondanaFolder.subfolder(at: bookmarkletsDir)
+        static let hondanaFolder: Folder = try! homeFolder.createSubfolderIfNeeded(at: hondanaDir)
+        static let bookmarkletsFolder: Folder = try! hondanaFolder.createSubfolderIfNeeded(at: bookmarkletsDir)
     }
 }

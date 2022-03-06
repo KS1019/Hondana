@@ -6,7 +6,7 @@ import Models
 enum Utils {
     static func generateHTML(from jsFiles: [File]) throws -> File {
         let rawHTMLstring = """
-            <!doctype html
+            <!doctype html>
             <html>
             <title>Bookmarklets</title>
             <h1>Bookmarklets</h1>

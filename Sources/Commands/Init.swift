@@ -12,7 +12,7 @@ struct Init: ParsableCommand {
 
 extension Init {
     func run() throws {
-        let folder = try Constants.rootFolder
+        let folder = try Constants.homeFolder
             .createSubfolderIfNeeded(at: Constants.hondanaDir)
             .createSubfolderIfNeeded(at: Constants.bookmarkletsDir)
         if folder.isEmpty() {
