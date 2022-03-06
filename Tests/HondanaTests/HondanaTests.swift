@@ -24,8 +24,8 @@ final class HondanaTests: XCTestCase {
         try AssertExecuteCommand(command: "hondana list", expected: "No bookmarklet exist")
 
         // 1 Bookmarklet
-        let bookmarksHtmlPath = try File(path: #file).parent!.parent!.url.appendingPathComponent("Fixtures/+test.js")
-        try Constants.bookmarkletsFolder.createFile(at: "+test.js", contents: try Data(contentsOf: bookmarksHtmlPath))
+        let bookmarkletJS = try File(path: #file).parent!.parent!.file(at: "Fixtures/+test.js")
+        try bookmarkletJS.copy(to: Constants.bookmarkletsFolder)
         try AssertExecuteCommand(command: "hondana list", expected: """
             +-------------------------------------------+
             | Bookmarklets                              |
