@@ -69,7 +69,7 @@ enum Utils {
                 in: html
             )
 
-            let regex = "<DT><A HREF=\"javascript:(.+)\">(.+)<\/A>"
+            let regex = "<DT><A HREF=\"javascript:(.+)\">(.+)</A>"
             let captureRegex = try NSRegularExpression(
                 pattern: regex,
                 options: []
