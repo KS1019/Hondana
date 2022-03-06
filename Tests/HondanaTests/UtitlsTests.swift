@@ -5,6 +5,10 @@ import Files
 import AssertSwiftCLI
 
 final class UtilsTests: XCTestCase {
+    override func tearDownWithError() throws {
+        try Constants.hondanaFolder.files.forEach { try $0.delete() }
+    }
+
     enum Utils {
         static func generateHTML(from jsFiles: [File]) throws -> File {
             let rawHTMLstring = """
