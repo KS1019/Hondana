@@ -90,7 +90,7 @@ extension XCTest {
         static let rootDir = "~/"
         static let hondanaDir = ".Hondana/"
         static let bookmarkletsDir = "Bookmarklets/"
-        
+
         // swiftlint:disable force_try
         static var rootFolder: Folder {
             if ProcessInfo.processInfo.environment["CI"] == nil
@@ -100,7 +100,7 @@ extension XCTest {
                 return try! Folder(path: rootDir)
             }
         }
-        
+
         static let hondanaFolder: Folder = try! rootFolder.createSubfolderIfNeeded(at: hondanaDir)
         static let bookmarkletsFolder: Folder = try! hondanaFolder.createSubfolderIfNeeded(at: bookmarkletsDir)
     }

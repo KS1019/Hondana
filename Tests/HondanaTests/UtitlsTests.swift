@@ -35,7 +35,7 @@ final class UtilsTests: XCTestCase {
             return "<a href=\"\(url)\">\(title)</a>"
         }
     }
-    
+
     func testGenerateHTML() throws {
         let bookmarkJS = try File(path: #file).parent!.parent!.file(at: "Fixtures/+test.js")
         let bookmarkHtml = try File(path: #file).parent!.parent!.file(at: "Fixtures/bookmarklets.html")
