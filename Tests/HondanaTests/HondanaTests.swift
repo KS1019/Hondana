@@ -83,12 +83,14 @@ final class HondanaTests: XCTestCase {
         return Bundle.main.bundleURL
       #endif
     }
+}
 
+extension XCTest {
     enum Constants {
         static let rootDir = "~/"
         static let hondanaDir = ".Hondana/"
         static let bookmarkletsDir = "Bookmarklets/"
-
+        
         // swiftlint:disable force_try
         static var rootFolder: Folder {
             if ProcessInfo.processInfo.environment["CI"] == nil
@@ -98,8 +100,8 @@ final class HondanaTests: XCTestCase {
                 return try! Folder(path: rootDir)
             }
         }
-
-        static let hondanaFolder: Folder = try! rootFolder.subfolder(at: hondanaDir)
-        static let bookmarkletsFolder: Folder = try! hondanaFolder.subfolder(at: bookmarkletsDir)
+        
+        static let hondanaFolder: Folder = try! rootFolder.createSubfolderIfNeeded(at: hondanaDir)
+        static let bookmarkletsFolder: Folder = try! hondanaFolder.createSubfolderIfNeeded(at: bookmarkletsDir)
     }
 }
