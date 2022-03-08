@@ -1,3 +1,5 @@
 included:
+  - Package.swift
+  - Dangerfile.swift
   - Sources/
   - Tests/

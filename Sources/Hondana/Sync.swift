@@ -1,7 +1,7 @@
-import ArgumentParser
-import Files
-import Foundation
-import Models
+import protocol ArgumentParser.ParsableCommand
+import struct ArgumentParser.CommandConfiguration
+import struct ArgumentParser.Option
+import HondanaKit
 import Extensions
 
 struct Sync: ParsableCommand {

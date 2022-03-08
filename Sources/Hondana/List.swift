@@ -1,12 +1,26 @@
-import ArgumentParser
-import Foundation
-import Files
-import SwiftyTextTable
-import Rainbow
-import Models
+#if canImport(Glibc)
+import struct Glibc.winsize
+import func Glibc.ioctl
+import var Glibc.STDOUT_FILENO
+import let Glibc.TIOCGWINSZ
+func ioctl(_ a: Int32, _ b: Int32, _ p: UnsafeMutableRawPointer) -> Int32 {
+    ioctl(CInt(a), UInt(b), p)
+}
+#elseif canImport(Darwin)
+import struct Darwin.winsize
+import func Darwin.ioctl
+import var Darwin.STDOUT_FILENO
+import let Darwin.TIOCGWINSZ
+#endif
+import struct Foundation.URL
+import protocol ArgumentParser.ParsableCommand
+import struct ArgumentParser.CommandConfiguration
+import struct ArgumentParser.Flag
+import HondanaKit
+import Extensions
 
 #if canImport(AppKit)
-import AppKit
+import AppKit.NSWorkspace
 #endif
 
 struct List: ParsableCommand {
@@ -22,39 +36,35 @@ struct List: ParsableCommand {
 
 extension List {
     func run() throws {
-        let jsFiles = Constants.bookmarkletsFolder
+        let jsFiles = FileSystem.bookmarkletsFolder
             .files
-            .filter { $0.extension == "js" }
+            .filter { $0.isBookmarklet }
         guard !jsFiles.isEmpty else {
             print("No bookmarklet exist")
             return
         }
-        #if canImport(AppKit)
+#if canImport(AppKit)
         guard !onSafari else {
-            let htmlFile = try Utils.generateHTML(from: jsFiles)
+            let htmlFile = try Utils.generateHTML(from: jsFiles, in: FileSystem.hondanaFolder)
             try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
             return
         }
-        #endif
+#endif
         var winsize = winsize()
-        let bookmarklets: [(uuid: String, title: String, url: String)] =
+        let bookmarklets: [Bookmarklet] =
         try jsFiles
-            .map { (uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+            .map {
+                Bookmarklet(
+                    uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
                     title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
                     url: String(try $0.readAsString(encodedAs: .utf8)
                         .withoutJSPrefix.minified.prefix(
                             ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
-                            Int(winsize.ws_col) - 30 : 30)))
+                            Int(winsize.ws_col) - 30 : 30))
+                )
             }
-        let titleCol = TextTableColumn(header: "Title".bold)
-        let urlCol = TextTableColumn(header: "URL".bold)
-        var table = TextTable(columns: [titleCol, urlCol], header: "Bookmarklets".bold)
 
-        bookmarklets.forEach { bookmarklet in
-            table.addRow(values: [bookmarklet.title, String(bookmarklet.url + "...").red])
-        }
-
-        print(table.render())
+        print(Output.render(from: bookmarklets))
     }
 }
 
