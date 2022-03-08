@@ -1,3 +1,18 @@
+#if canImport(Glibc)
+import struct Glibc.winsize
+import func Glibc.ioctl
+import var Glibc.STDOUT_FILENO
+import let Glibc.TIOCGWINSZ
+func ioctl(_ a: Int32, _ b: Int32, _ p: UnsafeMutableRawPointer) -> Int32 {
+    ioctl(CInt(a), UInt(b), p)
+}
+#elseif canImport(Darwin)
+import struct Darwin.winsize
+import func Darwin.ioctl
+import var Darwin.STDOUT_FILENO
+import let Darwin.TIOCGWINSZ
+#endif
+
 import protocol ArgumentParser.ParsableCommand
 import struct ArgumentParser.CommandConfiguration
 import struct ArgumentParser.Flag
