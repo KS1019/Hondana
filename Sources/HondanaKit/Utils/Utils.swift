@@ -1,10 +1,13 @@
-import Files
-import Foundation
-import ArgumentParser
-import Models
+@_implementationOnly import class Foundation.PropertyListDecoder
+@_implementationOnly import class Foundation.PropertyListEncoder
+@_implementationOnly import struct Foundation.NSRange
+@_implementationOnly import class Foundation.NSRegularExpression
 
-enum Utils {
-    static func generateHTML(from jsFiles: [File]) throws -> File {
+import Files
+import ArgumentParser
+
+public enum Utils {
+    public static func generateHTML(from jsFiles: [File], in folder: Folder) throws -> File {
         let rawHTMLstring = """
             <!doctype html>
             <html>
@@ -21,7 +24,7 @@ enum Utils {
         + """
             </html>
             """
-        return try Constants.hondanaFolder
+        return try folder
             .createFile(at: "bookmarklets.html", contents: rawHTMLstring.data(using: .utf8))
     }
 
@@ -29,17 +32,17 @@ enum Utils {
         return "<a href=\"\(url)\">\(title)</a>"
     }
 
-    static func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
+    public static func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
         switch from {
         case .hondanaDir:
-            let folder = Constants.bookmarkletsFolder
+            let folder = FileSystem.bookmarkletsFolder
             let jsFiles = folder.files.filter { $0.extension == "js" }
             return jsFiles
                 .compactMap {
                     Bookmarklet(file: $0)
                 }
         case .plist:
-            let file = try Constants.hondanaFolder.file(named: "Bookmarks.plist")
+            let file = try FileSystem.hondanaFolder.file(named: "Bookmarks.plist")
             let data = try file.read()
             let decoder = PropertyListDecoder()
             let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
@@ -61,7 +64,7 @@ enum Utils {
 
             return bookmarklets
         case .safariHTML:
-            let file = Constants.hondanaFolder
+            let file = FileSystem.hondanaFolder
                 .files.first { $0.extension == "html" }!
             let html = String(data: try file.read(), encoding: .utf8)!
             let htmlRange = NSRange(
@@ -106,12 +109,12 @@ enum Utils {
         }
     }
 
-    static func write(bookmarklets: [Bookmarklet], to: SyncOrigin) throws {
+    public static func write(bookmarklets: [Bookmarklet], to: SyncOrigin) throws {
         switch to {
         case .hondanaDir:
             // FIXME: This will fail when Bookmarklets/ does not exist
             // FIXME: Bookmarklets/ are assumed to be accessible. Throw an error if not.
-            let folder = Constants.bookmarkletsFolder
+            let folder = FileSystem.bookmarkletsFolder
 
             // FIXME: This can be super slow as the number of bookmarklets grows
             try bookmarklets
@@ -130,7 +133,7 @@ enum Utils {
                     }
                 }
         case .plist:
-            let file = try Constants.hondanaFolder.file(named: "Bookmarks.plist")
+            let file = try FileSystem.hondanaFolder.file(named: "Bookmarks.plist")
             let data = try file.read()
             let decoder = PropertyListDecoder()
             var settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
@@ -152,7 +155,7 @@ enum Utils {
         }
     }
 
-    enum SyncOrigin: String, ExpressibleByArgument {
+    public enum SyncOrigin: String, ExpressibleByArgument {
         case hondanaDir
         case plist
         case safariHTML

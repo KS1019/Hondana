@@ -1,6 +1,5 @@
 import XCTest
 import Extensions
-
 import Files
 
 // swiftlint:disable line_length

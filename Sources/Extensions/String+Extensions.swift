@@ -1,5 +1,3 @@
-import Foundation
-
 extension String {
     public var minified: String {
         if hasPrefix("javascript:") {

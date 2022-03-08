@@ -1,8 +1,6 @@
-import ArgumentParser
-import Files
-import Foundation
-import Models
-import Extensions
+import protocol ArgumentParser.ParsableCommand
+import struct ArgumentParser.CommandConfiguration
+import HondanaKit
 
 struct Init: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.Init.commandName,
@@ -12,9 +10,9 @@ struct Init: ParsableCommand {
 
 extension Init {
     func run() throws {
-        let folder = try Constants.homeFolder
-            .createSubfolderIfNeeded(at: Constants.hondanaDir)
-            .createSubfolderIfNeeded(at: Constants.bookmarkletsDir)
+        let folder = try FileSystem.home
+            .createSubfolderIfNeeded(at: FileSystem.hondanaDir)
+            .createSubfolderIfNeeded(at: FileSystem.bookmarkletsDir)
         if folder.isEmpty() {
             let jsContent = try Utils.readJSContents(from: .plist)
             try Utils.write(bookmarklets: jsContent, to: .hondanaDir)

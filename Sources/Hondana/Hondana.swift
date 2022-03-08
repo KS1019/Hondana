@@ -1,4 +1,6 @@
-import ArgumentParser
+import protocol ArgumentParser.ParsableCommand
+import struct ArgumentParser.CommandConfiguration
+import HondanaKit
 
 @main
 struct Hondana: ParsableCommand {

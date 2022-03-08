@@ -1,4 +1,4 @@
-import Files
+import struct Files.File
 
 extension File {
     public var isBookmarklet: Bool {

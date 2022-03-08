@@ -7,7 +7,6 @@
 
 // Using a upper case to follow the format of the plist
 // swiftlint:disable identifier_name
-import Foundation
 
 /// Codable Representaion for `Bookmarks.plist`
 struct BookmarksPlist: Codable {
@@ -51,7 +50,6 @@ public struct Bookmark: Codable {
 
 public struct Sync: Codable {
     public var ServerID: String?
-    public var `Data`: Data?
 }
 
 public struct URIDictionary: Codable {

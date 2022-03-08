@@ -17,6 +17,8 @@ public struct Bookmarklet {
 
 }
 
+@_implementationOnly import Extensions
+
 extension Bookmarklet {
     public init(bookmark: Bookmark) {
         self.init(uuid: bookmark.WebBookmarkUUID,
@@ -26,7 +28,6 @@ extension Bookmarklet {
 }
 
 import Files
-import Extensions
 
 extension Bookmarklet {
     public init?(file: File) {
