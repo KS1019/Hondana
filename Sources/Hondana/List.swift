@@ -12,7 +12,7 @@ import func Darwin.ioctl
 import var Darwin.STDOUT_FILENO
 import let Darwin.TIOCGWINSZ
 #endif
-
+import struct Foundation.URL
 import protocol ArgumentParser.ParsableCommand
 import struct ArgumentParser.CommandConfiguration
 import struct ArgumentParser.Flag
