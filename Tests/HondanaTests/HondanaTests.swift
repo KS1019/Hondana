@@ -3,15 +3,16 @@ import Files
 import class Foundation.Bundle
 
 import AssertSwiftCLI
+import HondanaKit
 
 final class HondanaTests: XCTestCase {
     var hondaDirExistsPrev = false
     override func setUpWithError() throws {
-        try Constants.homeFolder.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
+        try FileSystem.home.createSubfolderIfNeeded(at: ".Hondana").createSubfolderIfNeeded(at: "Bookmarklets")
     }
 
     override func tearDownWithError() throws {
-        try Constants.hondanaFolder.delete()
+        try FileSystem.hondanaFolder.delete()
     }
 
     func testVersionFlag() throws {
@@ -25,7 +26,7 @@ final class HondanaTests: XCTestCase {
 
         // 1 Bookmarklet
         let bookmarkletJS = try File(path: #file).parent!.parent!.file(at: "Fixtures/+test.js")
-        try bookmarkletJS.copy(to: Constants.bookmarkletsFolder)
+        try bookmarkletJS.copy(to: FileSystem.bookmarkletsFolder)
         try AssertExecuteCommand(command: "hondana list", expected: """
             +-------------------------------------------+
             | Bookmarklets                              |
@@ -36,7 +37,7 @@ final class HondanaTests: XCTestCase {
             +-------+-----------------------------------+
             """)
 
-        try Constants.bookmarkletsFolder.file(named: "+test.js").delete()
+        try FileSystem.bookmarkletsFolder.file(named: "+test.js").delete()
     }
 
     func testHelp() throws {
@@ -82,25 +83,5 @@ final class HondanaTests: XCTestCase {
       #else
         return Bundle.main.bundleURL
       #endif
-    }
-}
-
-extension XCTest {
-    enum Constants {
-        static let hondanaDir = ".Hondana/"
-        static let bookmarkletsDir = "Bookmarklets/"
-
-        // swiftlint:disable force_try
-        static var homeFolder: Folder {
-            if ProcessInfo.processInfo.environment["CI"] == nil
-                && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
-                return Folder.temporary
-            } else {
-                return Folder.home
-            }
-        }
-
-        static let hondanaFolder: Folder = try! homeFolder.createSubfolderIfNeeded(at: hondanaDir)
-        static let bookmarkletsFolder: Folder = try! hondanaFolder.createSubfolderIfNeeded(at: bookmarkletsDir)
     }
 }
