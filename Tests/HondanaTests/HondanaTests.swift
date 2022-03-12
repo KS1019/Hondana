@@ -19,7 +19,6 @@ final class HondanaTests: XCTestCase {
         try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6")
     }
 
-    // swiftlint:disable line_length
     func testList() throws {
         // No Bookmarklets
         try AssertExecuteCommand(command: "hondana list", expected: "No bookmarklet exist")
