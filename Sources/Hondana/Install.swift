@@ -10,6 +10,7 @@ struct Install: ParsableCommand {
 
 extension Install {
     func run() throws {
+        try Git.clone(repo: "", path: "")
     }
 }
 

@@ -3,6 +3,9 @@ import PackageDescription
 
 let package = Package(
     name: "Hondana",
+    platforms: [
+        .macOS(.v10_13)
+    ],
     products: [
         .executable(name: "hondana", targets: ["Hondana"]),
         .library(name: "HondanaKit", targets: ["HondanaKit"])
