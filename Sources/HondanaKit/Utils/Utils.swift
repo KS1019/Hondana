@@ -11,6 +11,11 @@ public enum Utils {
         let rawHTMLstring = """
             <!doctype html>
             <html>
+            <head>
+                <!-- Using https://github.com/xz/new.css -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css">
+                <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+            </head>
             <title>Bookmarklets</title>
             <h1>Bookmarklets</h1>
             """ +
@@ -29,7 +34,7 @@ public enum Utils {
     }
 
     private static func aTag(url: String, title: String) -> String {
-        return "<a href=\"\(url)\">\(title)</a>"
+        return "<a href=\"\(url)\"><button>\(title)</button></a>"
     }
 
     public static func readJSContents(from: SyncOrigin) throws -> [Bookmarklet] {
