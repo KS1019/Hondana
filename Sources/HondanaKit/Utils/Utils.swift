@@ -12,6 +12,7 @@ public enum Utils {
             <!doctype html>
             <html>
             <head>
+                <!-- Using https://github.com/xz/new.css -->
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css">
                 <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
             </head>
