@@ -32,6 +32,9 @@ struct List: ParsableCommand {
     @Flag(help: "List the bookmarklets on Safari browser")
     var onSafari = false
 #endif
+
+    @Flag(help: "List the bookmarklets as JSON")
+    var asJSON = false
 }
 
 extension List {
@@ -50,21 +53,39 @@ extension List {
             return
         }
 #endif
-        var winsize = winsize()
-        let bookmarklets: [Bookmarklet] =
-        try jsFiles
-            .map {
-                Bookmarklet(
-                    uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
-                    title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
-                    url: String(try $0.readAsString(encodedAs: .utf8)
-                        .withoutJSPrefix.minified.prefix(
-                            ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
-                            Int(winsize.ws_col) - 30 : 30))
-                )
-            }
+        var bookmarklets: [Bookmarklet]
 
-        print(Output.render(from: bookmarklets))
+        if asJSON {
+            bookmarklets =
+            try jsFiles
+                .map {
+                    Bookmarklet(
+                        uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                        title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                        url: String(try $0.readAsString(encodedAs: .utf8).withoutJSPrefix)
+                    )
+                }
+            let bookmarkletsData = Bookmarklets(bookmarklets: bookmarklets, version: "0.0.1")
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(bookmarkletsData)
+            print(String(data: data, encoding: .utf8)!)
+        } else {
+            var winsize = winsize()
+            bookmarklets =
+            try jsFiles
+                .map {
+                    Bookmarklet(
+                        uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                        title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                        url: String(try $0.readAsString(encodedAs: .utf8)
+                            .withoutJSPrefix.minified.prefix(
+                                ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
+                                Int(winsize.ws_col) - 30 : 30))
+                    )
+                }
+            print(Output.render(from: bookmarklets))
+        }
     }
 }
 
