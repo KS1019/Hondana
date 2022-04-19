@@ -20,4 +20,14 @@ final class UtilsTests: XCTestCase {
         let file = try Utils.generateHTML(from: [bookmarkJS], in: FileSystem.hondanaFolder)
         XCTAssertEqual(try file.readAsString().trimmingLines(), String(try bookmarkHtml.readAsString().trimmingLines().dropLast()))
     }
+
+    func testReadJSContentsForSafariHTML() throws {
+        let bookmarkHtml = try File(path: #file).parent!.parent!.file(at: "Fixtures/SafariBookmarks.html")
+        try bookmarkHtml.copy(to: FileSystem.hondanaFolder)
+        let bookmarks = try Utils.readJSContents(from: .safariHTML)
+        XCTAssertEqual(bookmarks.count, 1)
+        XCTAssertEqual(bookmarks.first!.title, "test")
+        XCTAssertEqual(bookmarks.first!.url, #"(alert("testing"))();"#)
+        XCTAssertEqual(bookmarks.first!.uuid, "")
+    }
 }
