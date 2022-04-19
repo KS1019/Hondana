@@ -1,6 +1,6 @@
 // TODO: This subcommand is currently inaccessible from cli.
-import protocol ArgumentParser.ParsableCommand
-import struct ArgumentParser.CommandConfiguration
+import ArgumentParser
+import ArgumentParser
 import HondanaKit
 
 struct Audit: ParsableCommand {
