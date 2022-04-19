@@ -8,27 +8,14 @@ struct Sync: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.Sync.commandName,
                                                     abstract: Constants.Sync.abstract,
                                                     discussion: Constants.Sync.discussion)
-
-    @Option(name: .shortAndLong, help: "Original source for syncing and overwriting bookmarklets in the other.")
-    var from: Utils.SyncOrigin = .hondanaDir
 }
 
 extension Sync {
     func run() throws {
         let jsContent: [Bookmarklet]
-        switch from {
-        case .hondanaDir:
-            jsContent = try Utils.readJSContents(from: .hondanaDir)
-            try Utils.write(bookmarklets: jsContent, to: .plist)
-        case .plist:
-            jsContent = (try Utils.readJSContents(from: .plist))
-                .map { Bookmarklet(uuid: $0.uuid, title: $0.title, url: $0.url.unminified) }
-            try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
-        case .safariHTML:
-            jsContent = (try Utils.readJSContents(from: .safariHTML))
-                .map { Bookmarklet(uuid: $0.uuid, title: $0.title, url: $0.url.unminified) }
-            try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
-        }
+        jsContent = (try Utils.readJSContents(from: .safariHTML))
+            .map { Bookmarklet(uuid: $0.uuid, title: $0.title, url: $0.url.unminified) }
+        try Utils.write(bookmarklets: jsContent, to: .hondanaDir)
     }
 }
 

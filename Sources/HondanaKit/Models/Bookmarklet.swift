@@ -14,19 +14,9 @@ public struct Bookmarklet {
         self.title = title
         self.url = url
     }
-
 }
 
 @_implementationOnly import Extensions
-
-extension Bookmarklet {
-    public init(bookmark: Bookmark) {
-        self.init(uuid: bookmark.WebBookmarkUUID,
-                  title: bookmark.URIDictionary!.title,
-                  url: bookmark.URLString!.withoutJSPrefix.unminified)
-    }
-}
-
 import Files
 
 extension Bookmarklet {

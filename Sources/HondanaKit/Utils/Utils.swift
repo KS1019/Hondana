@@ -46,28 +46,6 @@ public enum Utils {
                 .compactMap {
                     Bookmarklet(file: $0)
                 }
-        case .plist:
-            let file = try FileSystem.hondanaFolder.file(named: "Bookmarks.plist")
-            let data = try file.read()
-            let decoder = PropertyListDecoder()
-            let settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-            let root = settings.Children!.filter { child in
-                return child.Children != nil
-            }
-
-            let bookmarklets = root
-                .compactMap { child in
-                    child.Children
-                }
-                .flatMap { $0 }
-                .filter {
-                    $0.URLString!.hasPrefix("javascript")
-                }
-                .map {
-                    Bookmarklet(bookmark: $0)
-                }
-
-            return bookmarklets
         case .safariHTML:
             let file = FileSystem.hondanaFolder
                 .files.first { $0.extension == "html" }!
@@ -137,24 +115,6 @@ public enum Utils {
                         try folder.createFile(at: "\(bookmarklet.uuid)+\(bookmarklet.title).js", contents: bookmarklet.url.data(using: .utf8))
                     }
                 }
-        case .plist:
-            let file = try FileSystem.hondanaFolder.file(named: "Bookmarks.plist")
-            let data = try file.read()
-            let decoder = PropertyListDecoder()
-            var settings: Bookmark = try decoder.decode(Bookmark.self, from: data)
-
-            bookmarklets.forEach {
-                let newBookmarklet = Bookmark(WebBookmarkUUID: $0.uuid, WebBookmarkType: "WebBookmarkTypeLeaf", URLString: $0.url, URIDictionary: URIDictionary(title: $0.title))
-                if let index = settings.Children![1].Children!.firstIndex(where: { bookmarklet in newBookmarklet.WebBookmarkUUID == bookmarklet.WebBookmarkUUID }) {
-                    settings.Children![1].Children![index] = newBookmarklet
-                } else {
-                    settings.Children![1].Children!.insert(newBookmarklet, at: 0)
-                }
-            }
-            let encoder = PropertyListEncoder()
-            if let encoded = try? encoder.encode(settings) {
-                try file.write(encoded)
-            }
         case .safariHTML:
             fatalError("This Should Not Be Called")
         }
@@ -162,7 +122,6 @@ public enum Utils {
 
     public enum SyncOrigin: String, ExpressibleByArgument {
         case hondanaDir
-        case plist
         case safariHTML
     }
 }
