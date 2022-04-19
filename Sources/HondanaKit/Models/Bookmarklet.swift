@@ -4,7 +4,7 @@
 //
 //  Created by Kotaro Suto on 2022/02/27.
 //
-public struct Bookmarklet {
+public struct Bookmarklet: Codable {
     public var uuid: String
     public var title: String
     public var url: String
@@ -14,6 +14,22 @@ public struct Bookmarklet {
         self.title = title
         self.url = url
     }
+}
+
+public struct Bookmarklets: Codable {
+    public init(bookmarklets: [Bookmarklet], version: String, title: String? = nil, username: String? = nil, referenceURL: String? = nil) {
+        self.bookmarklets = bookmarklets
+        self.version = version
+        self.title = title
+        self.username = username
+        self.referenceURL = referenceURL
+    }
+
+    public var bookmarklets: [Bookmarklet]
+    public var version: String
+    public var title: String?
+    public var username: String?
+    public var referenceURL: String?
 }
 
 @_implementationOnly import Extensions
