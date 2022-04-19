@@ -48,10 +48,11 @@ final class HondanaTests: XCTestCase {
         `hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it,
         and outputs the filtered result in the table.
 
-        USAGE: hondana list [--on-safari]
+        USAGE: hondana list [--on-safari] [--as-json]
 
         OPTIONS:
           --on-safari             List the bookmarklets on Safari browser
+          --as-json               List the bookmarklets as JSON
           --version               Show the version.
           -h, --help              Show help information.
         """)
@@ -63,9 +64,10 @@ final class HondanaTests: XCTestCase {
         `hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it,
         and outputs the filtered result in the table.
 
-        USAGE: hondana list
+        USAGE: hondana list [--as-json]
 
         OPTIONS:
+          --as-json               List the bookmarklets as JSON
           --version               Show the version.
           -h, --help              Show help information.
         """)
