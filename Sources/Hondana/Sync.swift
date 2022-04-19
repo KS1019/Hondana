@@ -25,8 +25,7 @@ extension Constants {
         static let abstract =
         "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
         static let discussion =
-        "`hondana sync` first reads the `--from` option to decide which source should be used as origin."
-        + "After that, it will read the bookmarklets from the orign to sync the bookmarklets"
+        "`hondana sync` read the bookmarks from the browser or file to sync the bookmarklets"
         static let bookmarkletsURL = "Bookmarklets/"
     }
 }
