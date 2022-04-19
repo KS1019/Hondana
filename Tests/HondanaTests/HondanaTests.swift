@@ -16,7 +16,7 @@ final class HondanaTests: XCTestCase {
     }
 
     func testVersionFlag() throws {
-        try AssertExecuteCommand(command: "hondana --version", expected: "0.0.6")
+        try AssertExecuteCommand(command: "hondana --version", expected: "0.0.7")
     }
 
     func testList() throws {
