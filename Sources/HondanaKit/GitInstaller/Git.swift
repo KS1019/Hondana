@@ -8,7 +8,7 @@ public class Git {
     private static let process =  Process()
     public static func clone(repo: String, path: String) throws {
         process.executableURL = url
-        process.arguments = ["clone", repo, path]
+        process.arguments = ["clone", "https://github.com/" + repo + ".git", path]
         try process.run()
     }
 }
