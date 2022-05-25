@@ -1,16 +1,28 @@
-import protocol ArgumentParser.ParsableCommand
-import struct ArgumentParser.CommandConfiguration
+import ArgumentParser
 import HondanaKit
+import Files
 
 struct Install: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.Install.commandName,
                                                     abstract: Constants.Install.abstract,
                                                     discussion: Constants.Install.discussion)
+    
+    @Argument(help: "")
+    var bookmarklet: String
 }
 
 extension Install {
     func run() throws {
-        try Git.clone(repo: "", path: "")
+        let comp = bookmarklet.components(separatedBy: "/")
+        if comp.count == 3 {
+            let path = ""
+            try Git.clone(repo: comp[0]+"/"+comp[1] , path: path)
+            let folder = try Folder(path: path)
+            let file = folder.files.filter { $0.nameExcludingExtension.contains(comp[2]) }.first!
+            let bookmarkletFile = Bookmarklet(file: file)
+            try Utils.write(bookmarklets: [bookmarkletFile!], to: .hondanaDir)
+        }
+        
     }
 }
 
