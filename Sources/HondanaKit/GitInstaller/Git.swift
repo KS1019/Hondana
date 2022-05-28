@@ -8,8 +8,8 @@ public class Git {
     public static func clone(repo: String, path: String, closure: @escaping () throws -> Void) throws {
         process.executableURL = url
         process.arguments = ["clone", "https://github.com/" + repo + ".git", path, "-q"]
-        process.terminationHandler = { p in
-            if p.terminationStatus == 0 {
+        process.terminationHandler = { process in
+            if process.terminationStatus == 0 {
                 try? closure()
             }
         }
@@ -21,8 +21,8 @@ public class Git {
         FileManager.default.changeCurrentDirectoryPath(path)
         process.executableURL = url
         process.arguments = ["pull"]
-        process.terminationHandler = { p in
-            if p.terminationStatus == 0 {
+        process.terminationHandler = { process in
+            if process.terminationStatus == 0 {
                 try? closure()
             }
         }
