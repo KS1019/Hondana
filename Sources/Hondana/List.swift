@@ -44,17 +44,9 @@ extension List {
                 switch destination {
                 case .safari:
                     let htmlFile = try Utils.generateHTML(from: jsFiles, in: FileSystem.hondanaFolder)
-                    do {
                         try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
-                    } catch {
-                        fatalError("Failed to open Safari")
-                    }
                 case .vscode:
-                    do {
-                        try NSWorkspace.shared.open([FileSystem.bookmarkletsFolder.url], withApplicationAt: Constants.List.vscodeAppURL, configuration: [:])
-                    } catch {
-                        fatalError("Failed to open VS Code")
-                    }
+                   try NSWorkspace.shared.open([FileSystem.bookmarkletsFolder.url], withApplicationAt: Constants.List.vscodeAppURL, configuration: [:])
                 }
 
                 return
