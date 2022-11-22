@@ -7,7 +7,7 @@ struct Hondana: ParsableCommand {
         commandName: Constants.Hondana.commandName, abstract: Constants.Hondana.abstract,
         discussion: Constants.Hondana.discussion, version: version,
         subcommands: [
-            List.self, Init.self, Install.self
+            List.self, Init.self, Install.self, Add.self
         ])
 }
 
