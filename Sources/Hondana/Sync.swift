@@ -1,6 +1,6 @@
 import ArgumentParser
-import HondanaKit
 import Extensions
+import HondanaKit
 
 struct Sync: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.Sync.commandName,
@@ -21,9 +21,9 @@ extension Constants {
     enum Sync {
         static let commandName = "sync"
         static let abstract =
-        "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
+            "`hondana sync` syncs the JavaScript files in `~/.Hondana/Bookmarklets/` with bookmarklets in browsers"
         static let discussion =
-        "`hondana sync` read the bookmarks from the browser or file to sync the bookmarklets"
+            "`hondana sync` read the bookmarks from the browser or file to sync the bookmarklets"
         static let bookmarkletsURL = "Bookmarklets/"
     }
 }

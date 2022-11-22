@@ -1,7 +1,7 @@
 import struct Files.File
 
-extension File {
-    public var isBookmarklet: Bool {
+public extension File {
+    var isBookmarklet: Bool {
         self.extension! == "js" && self.nameExcludingExtension.contains("+")
     }
 }

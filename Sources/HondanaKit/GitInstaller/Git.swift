@@ -1,5 +1,5 @@
-@_implementationOnly import Foundation
 import Files
+@_implementationOnly import Foundation
 
 public class Git {
     private static let url = URL(fileURLWithPath: "/usr/bin/git")
@@ -16,8 +16,8 @@ public class Git {
         try process.run()
         process.waitUntilExit()
     }
-    
-    public static func pull(repo: String, path: String, closure: @escaping () throws -> Void) throws {
+
+    public static func pull(repo _: String, path: String, closure: @escaping () throws -> Void) throws {
         FileManager.default.changeCurrentDirectoryPath(path)
         process.executableURL = url
         process.arguments = ["pull"]

@@ -1,6 +1,6 @@
 import ArgumentParser
-import HondanaKit
 import Files
+import HondanaKit
 
 struct Add: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: Constants.Add.commandName,
@@ -22,13 +22,15 @@ extension Add {
             if try FileSystem.home
                 .subfolder(at: FileSystem.hondanaDir)
                 .subfolder(at: FileSystem.bookmarkletsDir)
-                .containsFile(named: fileName) {
+                .containsFile(named: fileName)
+            {
                 throw ValidationError("\(fileName) already exists. Change Bookmarklet Name")
             }
         } catch {
             fatalError("Could not reach \(FileSystem.bookmarkletsDir)")
         }
     }
+
     func run() throws {
         do {
             try FileSystem.home
@@ -38,7 +40,6 @@ extension Add {
         } catch {
             fatalError("Failed to create \(fileName)")
         }
-
     }
 }
 

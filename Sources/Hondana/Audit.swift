@@ -1,6 +1,5 @@
 // TODO: This subcommand is currently inaccessible from cli.
 import ArgumentParser
-import ArgumentParser
 import HondanaKit
 
 struct Audit: ParsableCommand {
@@ -10,9 +9,7 @@ struct Audit: ParsableCommand {
 }
 
 extension Audit {
-    func run() throws {
-
-    }
+    func run() throws {}
 }
 
 extension Constants {

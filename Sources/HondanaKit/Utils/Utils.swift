@@ -1,32 +1,32 @@
-@_implementationOnly import class Foundation.PropertyListDecoder
-@_implementationOnly import class Foundation.PropertyListEncoder
 @_implementationOnly import struct Foundation.NSRange
 @_implementationOnly import class Foundation.NSRegularExpression
+@_implementationOnly import class Foundation.PropertyListDecoder
+@_implementationOnly import class Foundation.PropertyListEncoder
 
-import Files
 import ArgumentParser
+import Files
 
 public enum Utils {
     public static func generateHTML(from jsFiles: [File], in folder: Folder) throws -> File {
         let rawHTMLstring = """
-            <!doctype html>
-            <html>
-            <head>
-                <!-- Using https://github.com/xz/new.css -->
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css">
-                <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
-            </head>
-            <title>Bookmarklets</title>
-            <h1>Bookmarklets</h1>
-            """ +
-        (try jsFiles
-            .map {
-                aTag(url: try $0.readAsString(encodedAs: .utf8).withJSPrefix.minified,
-                     title: $0.nameExcludingExtension.components(separatedBy: "+")[1])
-            }
-            .joined(separator: "\n")
-        )
-        + """
+        <!doctype html>
+        <html>
+        <head>
+            <!-- Using https://github.com/xz/new.css -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css">
+            <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+        </head>
+        <title>Bookmarklets</title>
+        <h1>Bookmarklets</h1>
+        """ +
+            (try jsFiles
+                .map {
+                    aTag(url: try $0.readAsString(encodedAs: .utf8).withJSPrefix.minified,
+                         title: $0.nameExcludingExtension.components(separatedBy: "+")[1])
+                }
+                .joined(separator: "\n")
+            )
+            + """
             </html>
             """
         return try folder
@@ -51,7 +51,7 @@ public enum Utils {
                 .files.first { $0.extension == "html" }!
             let html = String(data: try file.read(), encoding: .utf8)!
             let htmlRange = NSRange(
-                html.startIndex..<html.endIndex,
+                html.startIndex ..< html.endIndex,
                 in: html
             )
 
@@ -69,7 +69,7 @@ public enum Utils {
             let bookmarklets: [Bookmarklet] = matches
                 .compactMap { match in
                     var arr = [String]()
-                    for rangeIndex in 0..<match.numberOfRanges {
+                    for rangeIndex in 0 ..< match.numberOfRanges {
                         let matchRange = match.range(at: rangeIndex)
 
                         // Ignore matching the entire username string

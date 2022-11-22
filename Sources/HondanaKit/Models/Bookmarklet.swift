@@ -1,6 +1,6 @@
 //
 //  Bookmarklet.swift
-//  
+//
 //
 //  Created by Kotaro Suto on 2022/02/27.
 //
@@ -35,15 +35,16 @@ public struct Bookmarklets: Codable {
 @_implementationOnly import Extensions
 import Files
 
-extension Bookmarklet {
-    public init?(file: File) {
+public extension Bookmarklet {
+    init?(file: File) {
         guard !file.nameExcludingExtension.components(separatedBy: "+").isEmpty,
-              let url = try? file.readAsString() else {
-                  return nil
-              }
+              let url = try? file.readAsString()
+        else {
+            return nil
+        }
 
-        self.uuid = file.nameExcludingExtension.components(separatedBy: "+").first!
-        self.title = file.nameExcludingExtension.components(separatedBy: "+")[1]
+        uuid = file.nameExcludingExtension.components(separatedBy: "+").first!
+        title = file.nameExcludingExtension.components(separatedBy: "+")[1]
         self.url = url.withJSPrefix.minified
     }
 }

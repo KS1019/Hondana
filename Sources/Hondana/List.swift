@@ -1,18 +1,19 @@
 #if canImport(Glibc)
-import Glibc
-func ioctl(_ a: Int32, _ b: Int32, _ p: UnsafeMutableRawPointer) -> Int32 {
-    ioctl(CInt(a), UInt(b), p)
-}
+    import Glibc
+    func ioctl(_ a: Int32, _ b: Int32, _ p: UnsafeMutableRawPointer) -> Int32 {
+        ioctl(CInt(a), UInt(b), p)
+    }
+
 #elseif canImport(Darwin)
-import Darwin
+    import Darwin
 #endif
-import Foundation
 import ArgumentParser
-import HondanaKit
 import Extensions
+import Foundation
+import HondanaKit
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 struct List: ParsableCommand {
@@ -20,10 +21,10 @@ struct List: ParsableCommand {
                                                     abstract: Constants.List.abstract,
                                                     discussion: Constants.List.discussion)
 
-#if canImport(AppKit)
-    @Option(name: .customLong("on"), help: "List bookmarklets on specified destination")
-    var destination: Destination?
-#endif
+    #if canImport(AppKit)
+        @Option(name: .customLong("on"), help: "List bookmarklets on specified destination")
+        var destination: Destination?
+    #endif
 
     @Flag(help: "List the bookmarklets as JSON")
     var asJSON = false
@@ -38,9 +39,9 @@ extension List {
             print("No bookmarklet exist")
             return
         }
-#if canImport(AppKit)
-        if let destination = destination {
-            switch destination {
+        #if canImport(AppKit)
+            if let destination = destination {
+                switch destination {
                 case .safari:
                     let htmlFile = try Utils.generateHTML(from: jsFiles, in: FileSystem.hondanaFolder)
                     do {
@@ -54,23 +55,23 @@ extension List {
                     } catch {
                         fatalError("Failed to open VS Code")
                     }
-            }
+                }
 
-            return
-        }
-#endif
+                return
+            }
+        #endif
         var bookmarklets: [Bookmarklet]
 
         if asJSON {
             bookmarklets =
-            try jsFiles
-                .map {
-                    Bookmarklet(
-                        uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
-                        title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
-                        url: String(try $0.readAsString(encodedAs: .utf8).withoutJSPrefix)
-                    )
-                }
+                try jsFiles
+                    .map {
+                        Bookmarklet(
+                            uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                            title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                            url: String(try $0.readAsString(encodedAs: .utf8).withoutJSPrefix)
+                        )
+                    }
             let bookmarkletsData = Bookmarklets(bookmarklets: bookmarklets, version: "0.0.1")
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
@@ -79,17 +80,17 @@ extension List {
         } else {
             var winsize = winsize()
             bookmarklets =
-            try jsFiles
-                .map {
-                    Bookmarklet(
-                        uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
-                        title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
-                        url: String(try $0.readAsString(encodedAs: .utf8)
-                            .withoutJSPrefix.minified.prefix(
-                                ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
-                                Int(winsize.ws_col) - 30 : 30))
-                    )
-                }
+                try jsFiles
+                    .map {
+                        Bookmarklet(
+                            uuid: $0.nameExcludingExtension.components(separatedBy: "+").first!,
+                            title: $0.nameExcludingExtension.components(separatedBy: "+")[1],
+                            url: String(try $0.readAsString(encodedAs: .utf8)
+                                .withoutJSPrefix.minified.prefix(
+                                    ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize) == 0 ?
+                                        Int(winsize.ws_col) - 30 : 30))
+                        )
+                    }
             print(Output.render(from: bookmarklets))
         }
     }

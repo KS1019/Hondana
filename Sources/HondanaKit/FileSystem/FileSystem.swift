@@ -6,8 +6,9 @@ public enum FileSystem {
     public static let bookmarkletsDir = "Bookmarklets/"
 
     public static var home: Folder {
-        if ProcessInfo.processInfo.environment["CI"] == nil
-            && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+        if ProcessInfo.processInfo.environment["CI"] == nil,
+           ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        {
             return Folder.temporary
         } else {
             return Folder.home

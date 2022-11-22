@@ -1,5 +1,5 @@
-@_implementationOnly import SwiftyTextTable
 @_implementationOnly import Rainbow
+@_implementationOnly import SwiftyTextTable
 
 public enum Output {
     public static func render(from bookmarklets: [Bookmarklet]) -> String {

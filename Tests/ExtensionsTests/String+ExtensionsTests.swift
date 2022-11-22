@@ -1,5 +1,5 @@
-import XCTest
 import Extensions
+import XCTest
 
 // swiftlint:disable line_length
 final class StringExtensionsTests: XCTestCase {

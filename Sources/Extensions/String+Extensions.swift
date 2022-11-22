@@ -1,5 +1,5 @@
-extension String {
-    public var minified: String {
+public extension String {
+    var minified: String {
         if hasPrefix("javascript:") {
             return "javascript:" + withoutJSPrefix.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         } else {
@@ -7,7 +7,7 @@ extension String {
         }
     }
 
-    public var unminified: String {
+    var unminified: String {
         if hasPrefix("javascript:") {
             return "javascript:" + withoutJSPrefix.removingPercentEncoding!
         } else {
@@ -15,7 +15,7 @@ extension String {
         }
     }
 
-    public var withoutJSPrefix: String {
+    var withoutJSPrefix: String {
         if hasPrefix("javascript:") {
             return String(dropFirst("javascript:".count))
         } else {
@@ -23,7 +23,7 @@ extension String {
         }
     }
 
-    public var withJSPrefix: String {
+    var withJSPrefix: String {
         if !hasPrefix("javascript:") {
             return "javascript:" + self
         } else {
