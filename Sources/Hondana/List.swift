@@ -21,8 +21,8 @@ struct List: ParsableCommand {
                                                     discussion: Constants.List.discussion)
 
 #if canImport(AppKit)
-    @Flag(help: "List the bookmarklets on Safari browser")
-    var onSafari = false
+    @Option(name: .customLong("on"), help: "List bookmarklets on specified destination")
+    var destination: Destination?
 #endif
 
     @Flag(help: "List the bookmarklets as JSON")
@@ -39,9 +39,23 @@ extension List {
             return
         }
 #if canImport(AppKit)
-        guard !onSafari else {
-            let htmlFile = try Utils.generateHTML(from: jsFiles, in: FileSystem.hondanaFolder)
-            try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
+        if let destination = destination {
+            switch destination {
+                case .safari:
+                    let htmlFile = try Utils.generateHTML(from: jsFiles, in: FileSystem.hondanaFolder)
+                    do {
+                        try NSWorkspace.shared.open([htmlFile.url], withApplicationAt: Constants.List.safariAppURL, configuration: [:])
+                    } catch {
+                        fatalError("Failed to open Safari")
+                    }
+                case .vscode:
+                    do {
+                        try NSWorkspace.shared.open([FileSystem.bookmarkletsFolder.url], withApplicationAt: Constants.List.vscodeAppURL, configuration: [:])
+                    } catch {
+                        fatalError("Failed to open VS Code")
+                    }
+            }
+
             return
         }
 #endif
@@ -81,6 +95,13 @@ extension List {
     }
 }
 
+extension List {
+    enum Destination: String, ExpressibleByArgument {
+        case safari = "Safari"
+        case vscode = "VSCode"
+    }
+}
+
 extension Constants {
     enum List {
         static let commandName = "list"
@@ -88,5 +109,6 @@ extension Constants {
         static let discussion = "`hondana list` accesses to `~/.Hondana/Bookmarklets/`, reads the files in it, and outputs the filtered result in the table."
 
         static let safariAppURL = URL(string: "file://~/Applications/Safari.app")!
+        static let vscodeAppURL = URL(string: "file://~/Applications/Visual%20Studio%20Code.app")!
     }
 }
