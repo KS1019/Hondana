@@ -1,4 +1,4 @@
-import Foundation
+@_implementationOnly import Foundation
 import Files
 
 public class Git {
