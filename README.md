@@ -17,7 +17,7 @@ hondana init
 ```
 
 ## Usage
-```shell
+```
 OVERVIEW: `hondana` helps you manage bookmarklets.
 
 `hondana` is the root command to access other subcommands in order to manage
