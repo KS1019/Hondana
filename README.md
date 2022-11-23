@@ -30,13 +30,13 @@ OPTIONS:
   -h, --help              Show help information.
 
 SUBCOMMANDS:
-  sync                    `hondana sync` syncs the JavaScript files in
-                          `~/.Hondana/Bookmarklets/` with bookmarklets in
-                          browsers
-  list                    `hondana list` lists every bookmarklet present in
+  add                     `hondana add` adds a new bookmarklet in
                           `~/.Hondana/Bookmarklets/`
   init                    `hondana init` initilizes `~/.Hondana/Bookmarklets/`
                           directory.
+  install                 `hondana install`
+  list                    `hondana list` lists every bookmarklet present in
+                          `~/.Hondana/Bookmarklets/`
 
   See 'hondana help <subcommand>' for detailed help.
 ```
